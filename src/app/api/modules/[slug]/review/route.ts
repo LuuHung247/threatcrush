@@ -72,6 +72,20 @@ export async function POST(
 
   const sb = getSupabaseAdmin();
 
+  // Verify user is registered
+  const { data: profile } = await sb
+    .from("user_profiles")
+    .select("id")
+    .eq("email", body.user_email)
+    .single();
+
+  if (!profile) {
+    return NextResponse.json(
+      { error: "You must create an account to leave reviews." },
+      { status: 401 }
+    );
+  }
+
   const { data: mod } = await sb
     .from("modules")
     .select("id, rating_avg, rating_count")

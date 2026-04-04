@@ -63,7 +63,8 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/modules
- * Publish a new module. Accepts name + git_url/homepage_url + optional overrides.
+ * Publish a new module. Requires a registered account.
+ * Accepts name + git_url/homepage_url + optional overrides.
  */
 export async function POST(request: NextRequest) {
   let body: Record<string, unknown>;
@@ -83,9 +84,29 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "author_email is required" }, { status: 400 });
   }
 
-  const slug = slugify(name);
-
+  // Verify user is registered
   const sb = getSupabaseAdmin();
+  const { data: profile } = await sb
+    .from("user_profiles")
+    .select("id, email, email_verified")
+    .eq("email", author_email)
+    .single();
+
+  if (!profile) {
+    return NextResponse.json(
+      { error: "You must create an account at threatcrush.com/auth/signup before publishing modules." },
+      { status: 401 }
+    );
+  }
+
+  if (!profile.email_verified) {
+    return NextResponse.json(
+      { error: "Please verify your email before publishing modules." },
+      { status: 403 }
+    );
+  }
+
+  const slug = slugify(name);
 
   // Check if slug already exists
   const { data: existing } = await sb

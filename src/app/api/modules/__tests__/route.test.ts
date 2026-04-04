@@ -29,12 +29,21 @@ function resetChain(overrides: {
   mockSelect.mockReturnValue({ eq: mockEq });
 }
 
+const mockProfileSingle = vi.fn().mockResolvedValue({ data: { id: 'user-1', email: 'test@example.com', email_verified: true }, error: null });
+
 vi.mock("@/lib/supabase", () => ({
   getSupabaseAdmin: () => ({
-    from: () => ({
-      select: mockSelect,
-      insert: mockInsert,
-    }),
+    from: (table: string) => {
+      if (table === 'user_profiles') {
+        return {
+          select: () => ({ eq: () => ({ single: mockProfileSingle }) }),
+        };
+      }
+      return {
+        select: mockSelect,
+        insert: mockInsert,
+      };
+    },
   }),
   slugify: (name: string) =>
     name

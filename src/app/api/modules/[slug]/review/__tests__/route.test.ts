@@ -57,6 +57,15 @@ vi.mock("@/lib/supabase", () => ({
           }),
         };
       }
+      if (table === "user_profiles") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({ data: { id: 'user-1' }, error: null }),
+            }),
+          }),
+        };
+      }
       return {};
     },
   }),
