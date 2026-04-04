@@ -1,0 +1,374 @@
+"use client";
+
+import { useState } from "react";
+import ScrollReveal from "@/components/ScrollReveal";
+import WaitlistModal from "@/components/WaitlistModal";
+
+/* ─── Feature data ─── */
+const features = [
+  {
+    icon: "📡",
+    title: "Real-time Threat Feeds",
+    desc: "Continuous stream of IOCs, malware signatures, and threat data from global honeynets and dark web sources.",
+  },
+  {
+    icon: "🛡️",
+    title: "Vulnerability Tracking",
+    desc: "CVE monitoring with severity scoring, exploit availability tracking, and patch priority recommendations.",
+  },
+  {
+    icon: "🌐",
+    title: "Attack Surface Monitoring",
+    desc: "Discover exposed assets, shadow IT, and misconfigurations across your entire digital footprint.",
+  },
+  {
+    icon: "🎯",
+    title: "Threat Actor Intelligence",
+    desc: "TTPs, campaigns, and attribution data on APT groups, ransomware gangs, and emerging threat actors.",
+  },
+  {
+    icon: "⚡",
+    title: "API Access",
+    desc: "RESTful API with webhooks. Integrate threat data directly into your SIEM, SOAR, or custom tooling.",
+  },
+  {
+    icon: "🔔",
+    title: "Custom Alerts",
+    desc: "Rule-based alerting on IOCs, CVEs, threat actors, or any indicator relevant to your environment.",
+  },
+];
+
+const faqs = [
+  {
+    q: "What does \"Lifetime Access\" mean?",
+    a: "Pay once, access forever. No subscriptions, no renewals. You get access to the ThreatCrush platform and all future updates for life.",
+  },
+  {
+    q: "When will ThreatCrush launch?",
+    a: "We're in private beta. Waitlist members get early access before public launch. Expected Q3 2026.",
+  },
+  {
+    q: "What payment methods do you accept?",
+    a: "Credit/debit cards via Stripe, and cryptocurrency (BTC, ETH, USDT, and more) via CoinPayPortal.",
+  },
+  {
+    q: "Can I get a refund?",
+    a: "Yes. If you're not satisfied within 30 days of getting access, we'll refund your payment in full. No questions asked.",
+  },
+  {
+    q: "Is the API included in Lifetime Access?",
+    a: "Yes. Full API access with generous rate limits is included. Enterprise rate limits available on request.",
+  },
+];
+
+const included = [
+  "Real-time threat feeds",
+  "Vulnerability tracking & CVE alerts",
+  "Attack surface monitoring",
+  "Threat actor intelligence",
+  "Full API access",
+  "Custom alert rules",
+  "All future updates",
+  "Priority support",
+];
+
+export default function Home() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const openModal = () => setModalOpen(true);
+
+  return (
+    <>
+      <WaitlistModal open={modalOpen} onClose={() => setModalOpen(false)} />
+
+      {/* ─── NAV ─── */}
+      <nav className="fixed top-0 left-0 right-0 z-40 border-b border-tc-border/50 bg-tc-darker/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-bold text-tc-green glow-green font-mono">
+              ⚡ ThreatCrush
+            </span>
+          </div>
+          <div className="hidden sm:flex items-center gap-6 text-sm text-tc-text-dim">
+            <a href="#features" className="hover:text-tc-green transition-colors">Features</a>
+            <a href="#pricing" className="hover:text-tc-green transition-colors">Pricing</a>
+            <a href="#faq" className="hover:text-tc-green transition-colors">FAQ</a>
+          </div>
+          <button
+            onClick={openModal}
+            className="rounded-lg bg-tc-green px-4 py-2 text-sm font-bold text-black transition-all hover:bg-tc-green-dim"
+          >
+            Get Access
+          </button>
+        </div>
+      </nav>
+
+      <main>
+        {/* ─── HERO ─── */}
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden matrix-bg grid-pattern scanlines">
+          {/* Decorative gradient orbs */}
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-tc-green/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-tc-green/3 rounded-full blur-3xl" />
+
+          <div className="relative z-10 mx-auto max-w-4xl px-6 text-center pt-20">
+            <ScrollReveal>
+              <div className="inline-block rounded-full border border-tc-green/20 bg-tc-green/5 px-4 py-1.5 text-sm font-mono text-tc-green mb-8">
+                <span className="mr-2">●</span> PRIVATE BETA — LIMITED SPOTS
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={100}>
+              <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight mb-6">
+                <span className="text-tc-green glow-green-strong">Crush Every Threat</span>
+                <br />
+                <span className="text-white">Before It Crushes You</span>
+              </h1>
+            </ScrollReveal>
+
+            <ScrollReveal delay={200}>
+              <p className="mx-auto max-w-2xl text-lg sm:text-xl text-tc-text-dim mb-10 leading-relaxed">
+                Real-time threat intelligence that gives you the edge.
+                Threat feeds, vulnerability tracking, attack surface monitoring
+                — all in one platform.
+              </p>
+            </ScrollReveal>
+
+            <ScrollReveal delay={300}>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button
+                  onClick={openModal}
+                  className="rounded-xl bg-tc-green px-8 py-4 text-lg font-bold text-black transition-all hover:bg-tc-green-dim pulse-glow"
+                >
+                  Get Lifetime Access — $499
+                </button>
+                <a
+                  href="#features"
+                  className="rounded-xl border border-tc-border px-8 py-4 text-lg font-medium text-tc-text-dim transition-all hover:border-tc-green/30 hover:text-tc-text"
+                >
+                  See Features ↓
+                </a>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={400}>
+              <p className="mt-6 text-sm text-tc-text-dim">
+                💰 One-time payment · No subscription · Access forever
+              </p>
+            </ScrollReveal>
+
+            {/* Terminal decoration */}
+            <ScrollReveal delay={500}>
+              <div className="mt-16 mx-auto max-w-xl rounded-xl border border-tc-border bg-tc-card/80 p-4 text-left font-mono text-sm backdrop-blur-sm">
+                <div className="flex items-center gap-2 mb-3 pb-2 border-b border-tc-border">
+                  <span className="w-3 h-3 rounded-full bg-red-500/80" />
+                  <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                  <span className="w-3 h-3 rounded-full bg-green-500/80" />
+                  <span className="text-tc-text-dim text-xs ml-2">threatcrush — zsh</span>
+                </div>
+                <div className="space-y-1 text-tc-green/80">
+                  <p><span className="text-tc-text-dim">$</span> threatcrush scan --target your-org.com</p>
+                  <p className="text-tc-text-dim">[■■■■■■■■■■] Scanning attack surface...</p>
+                  <p><span className="text-yellow-400">⚠</span> 3 critical CVEs detected</p>
+                  <p><span className="text-red-400">✗</span> 1 active threat actor targeting your sector</p>
+                  <p><span className="text-tc-green">✓</span> Alerts configured. You&apos;re protected.</p>
+                </div>
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* ─── FEATURES ─── */}
+        <section id="features" className="py-24 sm:py-32">
+          <div className="mx-auto max-w-6xl px-6">
+            <ScrollReveal>
+              <div className="text-center mb-16">
+                <p className="font-mono text-sm text-tc-green mb-3 tracking-wider">// CAPABILITIES</p>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                  Everything You Need to <span className="text-tc-green glow-green">Stay Ahead</span>
+                </h2>
+              </div>
+            </ScrollReveal>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {features.map((f, i) => (
+                <ScrollReveal key={f.title} delay={i * 100}>
+                  <div className="group rounded-xl border border-tc-border bg-tc-card p-6 transition-all hover:border-tc-green/30 glow-box-hover h-full">
+                    <div className="text-3xl mb-4">{f.icon}</div>
+                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-tc-green transition-colors">
+                      {f.title}
+                    </h3>
+                    <p className="text-sm text-tc-text-dim leading-relaxed">
+                      {f.desc}
+                    </p>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─── HOW IT WORKS ─── */}
+        <section className="py-24 sm:py-32 border-t border-tc-border">
+          <div className="mx-auto max-w-4xl px-6">
+            <ScrollReveal>
+              <div className="text-center mb-16">
+                <p className="font-mono text-sm text-tc-green mb-3 tracking-wider">// PROCESS</p>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                  Three Steps to <span className="text-tc-green glow-green">Total Visibility</span>
+                </h2>
+              </div>
+            </ScrollReveal>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                { step: "01", title: "Sign Up", desc: "Enter your email and choose your payment method.", icon: "📧" },
+                { step: "02", title: "Pay Once", desc: "One-time $499 payment. Card or crypto. Done.", icon: "💎" },
+                { step: "03", title: "Get Access", desc: "Instant access to the full ThreatCrush platform.", icon: "🚀" },
+              ].map((s, i) => (
+                <ScrollReveal key={s.step} delay={i * 150}>
+                  <div className="text-center">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full border border-tc-green/30 bg-tc-green/5 text-2xl mb-4">
+                      {s.icon}
+                    </div>
+                    <div className="font-mono text-tc-green text-sm mb-2">{s.step}</div>
+                    <h3 className="text-xl font-bold text-white mb-2">{s.title}</h3>
+                    <p className="text-tc-text-dim text-sm">{s.desc}</p>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─── PRICING ─── */}
+        <section id="pricing" className="py-24 sm:py-32 border-t border-tc-border matrix-bg">
+          <div className="mx-auto max-w-2xl px-6">
+            <ScrollReveal>
+              <div className="text-center mb-12">
+                <p className="font-mono text-sm text-tc-green mb-3 tracking-wider">// PRICING</p>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                  One Price. <span className="text-tc-green glow-green">Forever.</span>
+                </h2>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={100}>
+              <div className="rounded-2xl border border-tc-green/30 bg-tc-card p-8 sm:p-10 glow-box">
+                <div className="text-center mb-8">
+                  <div className="inline-block rounded-full bg-tc-green/10 px-3 py-1 text-xs font-mono text-tc-green mb-4">
+                    LIFETIME ACCESS
+                  </div>
+                  <div className="flex items-baseline justify-center gap-1">
+                    <span className="text-5xl sm:text-6xl font-black text-white">$499</span>
+                    <span className="text-tc-text-dim text-lg">/once</span>
+                  </div>
+                  <p className="text-tc-text-dim mt-2">Pay once, access forever. No recurring fees.</p>
+                </div>
+
+                <ul className="space-y-3 mb-8">
+                  {included.map((item) => (
+                    <li key={item} className="flex items-center gap-3 text-sm text-tc-text">
+                      <span className="text-tc-green">✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={openModal}
+                  className="w-full rounded-xl bg-tc-green py-4 text-lg font-bold text-black transition-all hover:bg-tc-green-dim pulse-glow"
+                >
+                  Get Lifetime Access — $499
+                </button>
+
+                <div className="flex items-center justify-center gap-4 mt-4 text-xs text-tc-text-dim">
+                  <span>💳 Stripe</span>
+                  <span>·</span>
+                  <span>₿ Crypto</span>
+                  <span>·</span>
+                  <span>🔒 30-day refund</span>
+                </div>
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* ─── FAQ ─── */}
+        <section id="faq" className="py-24 sm:py-32 border-t border-tc-border">
+          <div className="mx-auto max-w-2xl px-6">
+            <ScrollReveal>
+              <div className="text-center mb-12">
+                <p className="font-mono text-sm text-tc-green mb-3 tracking-wider">// FAQ</p>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                  Questions? <span className="text-tc-green glow-green">Answers.</span>
+                </h2>
+              </div>
+            </ScrollReveal>
+
+            <div className="space-y-3">
+              {faqs.map((faq, i) => (
+                <ScrollReveal key={i} delay={i * 80}>
+                  <div className="rounded-xl border border-tc-border bg-tc-card overflow-hidden">
+                    <button
+                      onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                      className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-tc-green/5 transition-colors"
+                    >
+                      <span className="font-medium text-white text-sm sm:text-base">{faq.q}</span>
+                      <span className="text-tc-green ml-4 flex-shrink-0">
+                        {openFaq === i ? "−" : "+"}
+                      </span>
+                    </button>
+                    {openFaq === i && (
+                      <div className="px-6 pb-4 text-sm text-tc-text-dim leading-relaxed">
+                        {faq.a}
+                      </div>
+                    )}
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─── CTA BANNER ─── */}
+        <section className="py-20 border-t border-tc-border matrix-bg">
+          <div className="mx-auto max-w-3xl px-6 text-center">
+            <ScrollReveal>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                Ready to <span className="text-tc-green glow-green">Crush Threats</span>?
+              </h2>
+              <p className="text-tc-text-dim mb-8 max-w-xl mx-auto">
+                Join the waitlist now. Limited lifetime spots available at $499.
+                Price increases after launch.
+              </p>
+              <button
+                onClick={openModal}
+                className="rounded-xl bg-tc-green px-8 py-4 text-lg font-bold text-black transition-all hover:bg-tc-green-dim pulse-glow"
+              >
+                Get Lifetime Access — $499
+              </button>
+            </ScrollReveal>
+          </div>
+        </section>
+      </main>
+
+      {/* ─── FOOTER ─── */}
+      <footer className="border-t border-tc-border py-12">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="font-mono text-tc-green font-bold">⚡ ThreatCrush</div>
+            <div className="flex items-center gap-6 text-sm text-tc-text-dim">
+              <a href="#features" className="hover:text-tc-green transition-colors">Features</a>
+              <a href="#pricing" className="hover:text-tc-green transition-colors">Pricing</a>
+              <a href="#faq" className="hover:text-tc-green transition-colors">FAQ</a>
+            </div>
+            <p className="text-xs text-tc-text-dim">
+              © {new Date().getFullYear()} ThreatCrush. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
+    </>
+  );
+}
