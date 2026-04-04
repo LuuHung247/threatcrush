@@ -831,6 +831,7 @@ export default function Home() {
               <a href="/usage" className="hover:text-tc-green transition-colors">Usage</a>
               <a href="#pricing" className="hover:text-tc-green transition-colors">Pricing</a>
               <a href="#faq" className="hover:text-tc-green transition-colors">FAQ</a>
+              <a href="/affiliates" className="hover:text-tc-green transition-colors">Affiliates</a>
               <a href="https://github.com/profullstack/threatcrush" target="_blank" rel="noopener noreferrer" className="hover:text-tc-green transition-colors">GitHub</a>
               <a href="https://www.npmjs.com/package/@profullstack/threatcrush" target="_blank" rel="noopener noreferrer" className="hover:text-tc-green transition-colors">npm</a>
             </div>
