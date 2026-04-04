@@ -32,6 +32,11 @@ const features = [
     desc: "Email, SMS, Slack, Discord, and webhook notifications the instant a threat is detected. Push alerts to your phone. Never miss an attack.",
   },
   {
+    icon: "💢",
+    title: "Active Defense",
+    desc: "Fight back. Tar pits slow attackers down, honeypots trap them, deception serves fake data, and auto-reports file abuse complaints to their ISP.",
+  },
+  {
     icon: "⚙️",
     title: "systemd Daemon",
     desc: "Runs as a background service on your server. Auto-starts on boot, monitors 24/7, zero maintenance.",
@@ -80,6 +85,7 @@ const included = [
   "Network monitor — all ports, all protocols",
   "Real-time email + SMS alerts",
   "Webhook support for custom integrations",
+  "Active defense — tar pits, honeypots, deception",
   "systemd daemon — runs 24/7",
   "Full CLI, desktop & mobile apps",
   "All core modules + future updates",
@@ -251,7 +257,8 @@ export default function Home() {
                   <p><span className="text-tc-text-dim">[12:03:47]</span> <span className="text-red-400">✗</span> <span className="text-red-400">SSH brute force</span> <span className="text-tc-text-dim">— :22 91.232.105.3 → 47 failed attempts</span></p>
                   <p><span className="text-tc-text-dim">[12:03:50]</span> <span className="text-yellow-400">⚠</span> <span className="text-yellow-400">Port scan</span> <span className="text-tc-text-dim">— 45.33.32.156 scanning :21-:8080 (SYN flood)</span></p>
                   <p><span className="text-tc-text-dim">[12:03:52]</span> <span className="text-yellow-400">⚠</span> <span className="text-yellow-400">DNS tunneling</span> <span className="text-tc-text-dim">— :53 suspicious TXT queries from 103.44.8.2</span></p>
-                  <p><span className="text-tc-text-dim">[12:04:01]</span> <span className="text-tc-green">✓</span> <span className="text-tc-text-dim">3,891 connections analyzed · 4 threats · 1 blocked</span></p>
+                  <p><span className="text-tc-text-dim">[12:03:55]</span> <span className="text-tc-green">✓</span> <span className="text-tc-text-dim">Honeypot triggered — logging attacker recon on :2222</span></p>
+                  <p><span className="text-tc-text-dim">[12:04:01]</span> <span className="text-tc-green">✓</span> <span className="text-tc-text-dim">3,891 connections · 4 threats · 1 blocked · 2 tar-pitted</span></p>
                 </div>
               </div>
             </ScrollReveal>
@@ -397,7 +404,7 @@ export default function Home() {
                           { time: '14:23:07', type: 'crit', icon: '✗', msg: 'SSH brute — :22 91.232.105.3 (47 fails)', color: 'text-red-400' },
                           { time: '14:23:09', type: 'warn', icon: '⚠', msg: 'Port scan — 45.33.32.156 :21-:8080', color: 'text-yellow-400' },
                           { time: '14:23:12', type: 'warn', icon: '⚠', msg: 'DNS tunnel — :53 TXT from 103.44.8.2', color: 'text-yellow-400' },
-                          { time: '14:23:15', type: 'info', icon: '✓', msg: 'Blocked 91.232.105.3 via iptables', color: 'text-tc-green' },
+                          { time: '14:23:15', type: 'info', icon: '✓', msg: 'Tar pit engaged — 91.232.105.3 (slowing)', color: 'text-tc-green' },
                           { time: '14:23:18', type: 'crit', icon: '✗', msg: 'XSS attempt — :443 /search?q=<script>', color: 'text-red-400' },
                           { time: '14:23:22', type: 'info', icon: '✓', msg: 'Rate limited 45.33.32.156 (50 req/s)', color: 'text-tc-green' },
                         ].map((e, i) => (

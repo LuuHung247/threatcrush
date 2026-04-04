@@ -114,6 +114,10 @@ threatcrush license                   # Show license status
 | `dns-monitor` | Watches DNS queries and responses | DNS tunneling, DGA detection, suspicious resolutions |
 | `firewall-rules` | Dynamic firewall management | Auto-blocks IPs after threshold, manages iptables/nftables |
 | `alert-system` | Notification routing | Slack, Discord, email, webhook, PagerDuty, syslog |
+| `tar-pit` | Connection slowdown | Wastes attacker time/resources by throttling malicious connections |
+| `honeypot` | Decoy services | Fake SSH, FTP, admin panels that log everything attackers try |
+| `deception` | Fake data serving | Serves fake /etc/passwd, fake DB dumps, fake API keys to attackers |
+| `abuse-reporter` | Automated reporting | Files abuse reports to attacker's ISP/hosting via AbuseIPDB, Spamhaus |
 
 ### Community/Paid Modules (marketplace)
 
