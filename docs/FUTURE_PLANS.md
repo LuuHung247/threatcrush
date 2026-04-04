@@ -170,13 +170,19 @@ threatcrush status
 # That's it. You're protected.
 ```
 
-**No cloud accounts.** No integrations. No config files to edit. No Docker. No Kubernetes.
+**No cloud accounts.** No integrations. No config files to edit.
 
 Just plug it in and SSH. The device ships pre-configured with all core modules running.
 
 Want to customize? `threatcrush tui` gives you the full dashboard over SSH.
 
-Cloud integrations (AWS VPC, Docker, K8s DaemonSets) are future scope for enterprise customers.
+#### Also available as Docker
+```bash
+docker run -d --net=host --name threatcrush \
+  -v /var/log:/var/log:ro \
+  ghcr.io/profullstack/threatcrush:latest
+```
+Same daemon, same modules. For VPS/cloud servers where you can't plug in hardware.
 
 ---
 
