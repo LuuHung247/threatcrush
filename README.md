@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="https://img.shields.io/npm/v/@profullstack/threatcrush?color=00ff41&style=flat-square&label=version" alt="npm version" />
-  <img src="https://img.shields.io/npm/dm/@profullstack/threatcrush?color=00ff41&style=flat-square&label=downloads" alt="downloads" />
-  <img src="https://img.shields.io/github/license/profullstack/threatcrush?color=00ff41&style=flat-square" alt="license" />
+  <a href="https://www.npmjs.com/package/@profullstack/threatcrush"><img src="https://img.shields.io/npm/v/@profullstack/threatcrush?color=00ff41&style=flat-square&label=version" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/@profullstack/threatcrush"><img src="https://img.shields.io/npm/dm/@profullstack/threatcrush?color=00ff41&style=flat-square&label=downloads" alt="downloads" /></a>
+  <a href="https://github.com/profullstack/threatcrush"><img src="https://img.shields.io/github/license/profullstack/threatcrush?color=00ff41&style=flat-square" alt="license" /></a>
+  <a href="https://github.com/profullstack/threatcrush"><img src="https://img.shields.io/github/stars/profullstack/threatcrush?color=00ff41&style=flat-square" alt="stars" /></a>
+  <a href="https://github.com/profullstack/threatcrush"><img src="https://img.shields.io/badge/github-profullstack%2Fthreatcrush-00ff41?style=flat-square&logo=github" alt="github" /></a>
   <img src="https://img.shields.io/node/v/@profullstack/threatcrush?color=00ff41&style=flat-square" alt="node" />
-  <img src="https://img.shields.io/github/stars/profullstack/threatcrush?color=00ff41&style=flat-square" alt="stars" />
   <img src="https://img.shields.io/badge/platform-linux-00ff41?style=flat-square" alt="platform" />
-  <img src="https://img.shields.io/badge/security-agent-00ff41?style=flat-square" alt="security agent" />
 </p>
 
 <h1 align="center">
