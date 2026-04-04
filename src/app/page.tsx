@@ -148,6 +148,23 @@ export default function Home() {
             </ScrollReveal>
 
             <ScrollReveal delay={300}>
+              <div className="mx-auto max-w-lg mb-8">
+                <p className="text-sm text-tc-text-dim mb-3">Install in seconds:</p>
+                <div className="flex flex-col gap-2">
+                  <div className="group relative rounded-lg border border-tc-border bg-tc-card/80 px-4 py-3 font-mono text-sm backdrop-blur-sm">
+                    <span className="text-tc-text-dim">$ </span>
+                    <span className="text-tc-green">npm i -g @profullstack/threatcrush</span>
+                  </div>
+                  <p className="text-xs text-tc-text-dim text-center">or</p>
+                  <div className="group relative rounded-lg border border-tc-border bg-tc-card/80 px-4 py-3 font-mono text-sm backdrop-blur-sm">
+                    <span className="text-tc-text-dim">$ </span>
+                    <span className="text-tc-green">npx @profullstack/threatcrush</span>
+                  </div>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={400}>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <button
                   onClick={openModal}
@@ -164,7 +181,7 @@ export default function Home() {
               </div>
             </ScrollReveal>
 
-            <ScrollReveal delay={400}>
+            <ScrollReveal delay={500}>
               <p className="mt-6 text-sm text-tc-text-dim">
                 💰 $499 one-time · No subscription · Access forever
               </p>
