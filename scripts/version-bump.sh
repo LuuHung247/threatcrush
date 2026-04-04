@@ -17,7 +17,7 @@ NEW_VERSION=$(npm version "$BUMP" --no-git-tag-version | tr -d 'v')
 echo "Root: $NEW_VERSION"
 
 # Bump all sub-packages
-for pkg in cli; do
+for pkg in cli desktop mobile; do
   if [ -f "$ROOT_DIR/$pkg/package.json" ]; then
     cd "$ROOT_DIR/$pkg"
     npm version "$NEW_VERSION" --no-git-tag-version --allow-same-version
