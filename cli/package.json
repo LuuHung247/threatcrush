@@ -1,6 +1,6 @@
 {
   "name": "@profullstack/threatcrush",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "All-in-one security agent daemon — monitor, detect, scan, and protect servers in real-time",
   "bin": {
     "threatcrush": "./dist/index.js"
@@ -23,7 +23,7 @@
     "cli",
     "cybersecurity"
   ],
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "dependencies": {
     "@iarna/toml": "^2.2.5",
     "better-sqlite3": "^11.7.0",
