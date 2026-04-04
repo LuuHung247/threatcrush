@@ -1,8 +1,7 @@
 {
   "name": "@profullstack/threatcrush",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "All-in-one security agent daemon — monitor, detect, scan, and protect servers in real-time",
-  
   "bin": {
     "threatcrush": "./dist/index.js"
   },
@@ -17,11 +16,14 @@
   "keywords": [
     "security",
     "monitoring",
-    "ssh",
     "threat-detection",
-    "cli"
+    "pentest",
+    "scanner",
+    "daemon",
+    "cli",
+    "cybersecurity"
   ],
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "@iarna/toml": "^2.2.5",
     "better-sqlite3": "^11.7.0",
@@ -37,5 +39,15 @@
     "@types/node": "^22.19.17",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/profullstack/threatcrush.git",
+    "directory": "cli"
+  },
+  "homepage": "https://threatcrush.com",
+  "bugs": {
+    "url": "https://github.com/profullstack/threatcrush/issues"
+  },
+  "author": "Profullstack, Inc. <hello@profullstack.com>"
 }
