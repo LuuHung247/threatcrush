@@ -106,6 +106,7 @@ export default function Home() {
           <div className="hidden sm:flex items-center gap-6 text-sm text-tc-text-dim">
             <a href="#features" className="hover:text-tc-green transition-colors">Features</a>
             <a href="/store" className="hover:text-tc-green transition-colors">Module Store</a>
+            <a href="/usage" className="hover:text-tc-green transition-colors">Usage</a>
             <a href="#pricing" className="hover:text-tc-green transition-colors">Pricing</a>
             <a href="#faq" className="hover:text-tc-green transition-colors">FAQ</a>
             <a href="https://github.com/profullstack/threatcrush" target="_blank" rel="noopener noreferrer" className="hover:text-tc-green transition-colors flex items-center gap-1">
@@ -826,6 +827,7 @@ export default function Home() {
             <div className="flex items-center gap-6 text-sm text-tc-text-dim">
               <a href="#features" className="hover:text-tc-green transition-colors">Features</a>
               <a href="/store" className="hover:text-tc-green transition-colors">Module Store</a>
+              <a href="/usage" className="hover:text-tc-green transition-colors">Usage</a>
               <a href="#pricing" className="hover:text-tc-green transition-colors">Pricing</a>
               <a href="#faq" className="hover:text-tc-green transition-colors">FAQ</a>
               <a href="https://github.com/profullstack/threatcrush" target="_blank" rel="noopener noreferrer" className="hover:text-tc-green transition-colors">GitHub</a>
