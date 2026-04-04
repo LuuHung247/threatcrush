@@ -7,10 +7,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "version:patch": "./scripts/version-bump.sh patch",
-    "version:minor": "./scripts/version-bump.sh minor",
-    "version:major": "./scripts/version-bump.sh major",
-    "publish:cli": "cd cli && npm publish"
+    "build:cli": "pnpm --filter @profullstack/threatcrush build",
+    "build:desktop": "pnpm --filter @profullstack/threatcrush-desktop build",
+    "version:bump": "node scripts/version-bump.mjs",
+    "version:patch": "node scripts/version-bump.mjs patch",
+    "version:minor": "node scripts/version-bump.mjs minor",
+    "version:major": "node scripts/version-bump.mjs major",
+    "publish:cli": "cd cli && npm publish",
+    "setup:hooks": "git config core.hooksPath .githooks && git config push.followTags true && echo '\u2705 Git hooks and push.followTags configured'",
+    "setup": "pnpm setup:hooks",
+    "postinstall": "git config core.hooksPath .githooks && git config push.followTags true 2>/dev/null || true"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.101.1",
