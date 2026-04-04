@@ -1,90 +1,146 @@
-# ⚡ ThreatCrush
+<p align="center">
+  <img src="https://img.shields.io/npm/v/@profullstack/threatcrush?color=00ff41&style=flat-square&label=version" alt="npm version" />
+  <img src="https://img.shields.io/npm/dm/@profullstack/threatcrush?color=00ff41&style=flat-square&label=downloads" alt="downloads" />
+  <img src="https://img.shields.io/github/license/profullstack/threatcrush?color=00ff41&style=flat-square" alt="license" />
+  <img src="https://img.shields.io/node/v/@profullstack/threatcrush?color=00ff41&style=flat-square" alt="node" />
+  <img src="https://img.shields.io/github/stars/profullstack/threatcrush?color=00ff41&style=flat-square" alt="stars" />
+  <img src="https://img.shields.io/badge/platform-linux-00ff41?style=flat-square" alt="platform" />
+  <img src="https://img.shields.io/badge/security-agent-00ff41?style=flat-square" alt="security agent" />
+</p>
 
-**Crush Every Threat Before It Crushes You.**
+<h1 align="center">
+  <br>
+  🛡️ ThreatCrush
+  <br>
+</h1>
 
-Real-time threat intelligence platform with threat feeds, vulnerability tracking, attack surface monitoring, and threat actor intelligence.
+<h4 align="center">All-in-one security agent — monitor, detect, scan, and protect servers in real-time.</h4>
 
-## Stack
+<p align="center">
+  <a href="https://threatcrush.com">Website</a> •
+  <a href="#install">Install</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#features">Features</a> •
+  <a href="#modules">Modules</a> •
+  <a href="https://github.com/profullstack/threatcrush">GitHub</a>
+</p>
 
-- **Framework:** Next.js 16 (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS v4
-- **Database:** Supabase (Postgres)
-- **Payments:** Stripe (card) + CoinPayPortal (crypto)
-- **Package Manager:** pnpm
+---
 
-## Getting Started
+ThreatCrush is a security daemon that runs on your server, monitoring **every connection on every port**. It detects live attacks, scans your codebase, pentests your APIs, and alerts you in real-time.
+
+```
+$ threatcrush monitor
+
+  [12:03:41] ✓ Monitoring all ports · nginx · sshd · postgres
+  [12:03:42] ✓ Loaded 1,247 attack signatures
+  [12:03:45] ⚠ SQLi attempt — :443 185.43.21.8 → /api/users?id=1 OR 1=1
+  [12:03:47] ✗ SSH brute force — :22 91.232.105.3 → 47 failed attempts
+  [12:03:50] ⚠ Port scan — 45.33.32.156 scanning :21-:8080 (SYN flood)
+  [12:03:52] ⚠ DNS tunneling — :53 suspicious TXT queries from 103.44.8.2
+  [12:04:01] ✓ 3,891 connections analyzed · 4 threats · 1 blocked
+```
+
+## Install
 
 ```bash
-# Install dependencies
-pnpm install
-
-# Copy environment variables
-cp .env.example .env.local
-# Fill in your Supabase, Stripe, and CoinPayPortal credentials
-
-# Run the development server
-pnpm dev
+npm i -g @profullstack/threatcrush
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
-
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── api/
-│   │   └── waitlist/
-│   │       └── route.ts      # Waitlist signup API
-│   ├── globals.css            # Global styles + custom CSS
-│   ├── layout.tsx             # Root layout with metadata
-│   └── page.tsx               # Landing page
-├── components/
-│   ├── ScrollReveal.tsx       # Scroll-triggered fade-in animation
-│   └── WaitlistModal.tsx      # Email + payment method modal
-supabase/
-└── migrations/
-    └── 001_waitlist.sql       # Waitlist table migration
-```
-
-## Database Setup
-
-Run the migration in your Supabase SQL editor or via CLI:
+Or with your preferred package manager:
 
 ```bash
-supabase db push
+pnpm add -g @profullstack/threatcrush
+yarn global add @profullstack/threatcrush
 ```
 
-The `waitlist` table stores:
-- `email` — unique email address
-- `paid` — whether payment is confirmed
-- `payment_method` — `stripe` or `crypto`
-- `stripe_session_id` / `coinpay_invoice_id` — payment references
-- `created_at` / `updated_at` — timestamps
+## Usage
 
-## Waitlist API
-
-### `POST /api/waitlist`
-
-```json
-{
-  "email": "user@example.com",
-  "payment_method": "stripe"
-}
+```bash
+threatcrush              # Get started
+threatcrush monitor      # Real-time security monitoring (all ports)
+threatcrush tui          # Interactive dashboard (htop for security)
+threatcrush scan ./src   # Scan code for vulnerabilities & secrets
+threatcrush pentest URL  # Penetration test a URL/API
+threatcrush init         # Auto-detect services, generate config
+threatcrush status       # Show daemon status & loaded modules
+threatcrush modules      # Manage security modules
+threatcrush store        # Browse the module marketplace
+threatcrush update       # Update CLI & all modules
 ```
 
-Returns `{ success: true, message: "..." }` on success.
+## Features
 
-## TODO
+| Feature | Description |
+|---------|-------------|
+| 🔍 **Live Attack Detection** | Monitors all inbound connections on every port. Detects SQLi, XSS, brute force, SSH attacks, port scans, DNS tunneling. |
+| 🛡️ **Code Security Scanner** | Scan your codebase for vulnerabilities, hardcoded secrets, and misconfigurations. |
+| 💥 **Pentest Engine** | Automated penetration testing on your URLs and APIs. |
+| 🔀 **Network Monitor** | Watches all TCP/UDP traffic across every port — HTTP, SSH, DNS, FTP, databases. |
+| 🔔 **Real-time Alerts** | Slack, email, webhook notifications the instant a threat is detected. |
+| ⚙️ **systemd Daemon** | Runs as a background service on your server. Auto-starts on boot, monitors 24/7. |
+| 📊 **TUI Dashboard** | Interactive terminal dashboard — htop for security. |
 
-- [ ] Connect Supabase client
-- [ ] Implement Stripe Checkout flow
-- [ ] Implement CoinPayPortal payment flow
-- [ ] Add webhook handlers for payment confirmation
-- [ ] Email confirmation flow
-- [ ] Admin dashboard for waitlist management
+## Modules
+
+ThreatCrush uses a pluggable module system. Install from the marketplace or build your own:
+
+```bash
+threatcrush modules list                # List installed
+threatcrush modules install ssh-guard   # Install a module
+threatcrush modules install docker-monitor
+threatcrush store search "firewall"     # Search marketplace
+threatcrush store publish ./my-module   # Publish your own
+```
+
+### Core Modules (included)
+
+| Module | What it monitors |
+|--------|-----------------|
+| `network-monitor` | All TCP/UDP traffic, port scans, SYN floods |
+| `log-watcher` | nginx, Apache, syslog, journald |
+| `ssh-guard` | Failed logins, brute force, tunneling |
+| `code-scanner` | Vulnerabilities, secrets, dependency CVEs |
+| `pentest-engine` | SQLi, XSS, SSRF, API fuzzing |
+| `dns-monitor` | DNS tunneling, DGA detection |
+| `firewall-rules` | Auto-blocks via iptables/nftables |
+| `alert-system` | Slack, Discord, email, webhook, PagerDuty |
+
+### Community Modules
+
+Build and sell your own modules on the ThreatCrush marketplace:
+- `docker-monitor` — Container escape detection
+- `k8s-watcher` — Kubernetes cluster security
+- `honeypot` — Deploy decoy services
+- `geo-blocker` — Block traffic by country/ASN
+- `compliance-reporter` — SOC2, HIPAA, PCI-DSS reports
+
+## Configuration
+
+```bash
+threatcrush init    # Auto-detect & generate config
+```
+
+Config lives at `/etc/threatcrush/threatcrushd.conf` with module configs in `/etc/threatcrush/threatcrushd.conf.d/`.
+
+## Pricing
+
+| Tier | Price |
+|------|-------|
+| **Lifetime Access** | $499 one-time |
+| **With Referral** | $249 (both you and your friend) |
+
+Pay once, access forever. All core modules, CLI, daemon, API, and lifetime updates included.
+
+👉 [Get lifetime access at threatcrush.com](https://threatcrush.com)
+
+## Links
+
+- 🌐 **Website:** [threatcrush.com](https://threatcrush.com)
+- 📦 **npm:** [@profullstack/threatcrush](https://www.npmjs.com/package/@profullstack/threatcrush)
+- 🐙 **GitHub:** [profullstack/threatcrush](https://github.com/profullstack/threatcrush)
+- 🐛 **Issues:** [GitHub Issues](https://github.com/profullstack/threatcrush/issues)
 
 ## License
 
-Proprietary. All rights reserved.
+MIT © [Profullstack, Inc.](https://profullstack.com)
