@@ -65,7 +65,7 @@ const faqs = [
   },
   {
     q: "How does the referral program work?",
-    a: "After signing up, you get a unique referral link. Share it with a friend — when they join, you both pay $399 instead of $499. There's no limit on referrals. Each friend you refer saves you both $100.",
+    a: "After signing up, you get a unique referral link. Your friend pays $399 ($100 off), and you earn $100 cash for every paid referral. No limits — refer 5 friends and you've paid for your own license. You must be a paying member to earn referral payouts.",
   },
 ];
 
@@ -675,7 +675,7 @@ export default function Home() {
                     <span className="text-tc-text-dim text-lg">/once</span>
                   </div>
                   <p className="text-tc-text-dim mt-2">Full platform: CLI, daemon, scanner, pentest engine, API. Pay once.</p>
-                  <p className="text-tc-green text-sm mt-1 font-medium">🎁 Refer a friend → both get $100 off ($399)</p>
+                  <p className="text-tc-green text-sm mt-1 font-medium">🎁 Refer a friend → they save $100, you earn $100</p>
                 </div>
 
                 <ul className="space-y-3 mb-8">
@@ -716,7 +716,7 @@ export default function Home() {
                   Bring a Friend. <span className="text-tc-green glow-green">Both Save $250.</span>
                 </h2>
                 <p className="text-tc-text-dim mt-4 max-w-xl mx-auto">
-                  Share your referral link after signing up. When your friend joins, you both get lifetime access for <strong className="text-tc-green">$399</strong> instead of $499 — $100 off each.
+                  Share your referral link after signing up. When your friend joins, your friend gets lifetime access for <strong className="text-tc-green">$399</strong> and you earn <strong className="text-tc-green">$100 cash</strong> per referral. Refer 5 friends = free license.
                 </p>
               </div>
             </ScrollReveal>
@@ -736,7 +736,7 @@ export default function Home() {
                 <div className="rounded-xl border border-tc-border bg-tc-card p-6 text-center">
                   <div className="text-3xl mb-3">💰</div>
                   <h3 className="font-bold text-white mb-2">3. Both Save</h3>
-                  <p className="text-sm text-tc-text-dim">You both pay $399 instead of $499. $100 off each, no limits on referrals.</p>
+                  <p className="text-sm text-tc-text-dim">They pay $399, you earn $100 cash. No limits. Must be a paying member to earn.</p>
                 </div>
               </div>
             </ScrollReveal>
