@@ -256,7 +256,21 @@ cd extension && pnpm install && node scripts/build.js all
 
 ---
 
-## 10. Domain & DNS
+## 10. Docker Hub (Optional)
+
+**What:** Publish `profullstack/threatcrush` Docker image.
+
+1. Create org at https://hub.docker.com/orgs → `profullstack`
+2. Generate access token: Account Settings → Security → New Access Token
+3. Add to GitHub secrets:
+   - `DOCKER_USERNAME` → your Docker Hub username
+   - `DOCKER_TOKEN` → the access token
+
+Also publishes to `ghcr.io/profullstack/threatcrush` (GitHub Container Registry) automatically.
+
+---
+
+## 11. Domain & DNS
 
 **threatcrush.com:**
 - Point to Railway: CNAME → `threatcrush-production.up.railway.app`
