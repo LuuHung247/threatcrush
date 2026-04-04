@@ -37,8 +37,22 @@ jobs:
       - name: Build CLI
         run: pnpm --filter @profullstack/threatcrush build
 
+      - name: Check if version exists
+        id: check
+        working-directory: cli
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "@profullstack/threatcrush@$VERSION" version 2>/dev/null; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Version $VERSION already published, skipping."
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish CLI
-        if: ${{ !github.event.inputs.dry_run }}
+        if: ${{ !github.event.inputs.dry_run && steps.check.outputs.exists != 'true' }}
         working-directory: cli
         run: npm publish --access public
         env:
