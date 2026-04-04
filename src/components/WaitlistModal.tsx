@@ -38,7 +38,7 @@ export default function WaitlistModal({
 
   if (!open) return null;
 
-  const price = referralCode ? 249 : 499;
+  const price = referralCode ? 399 : 499;
 
   // Step 1: Email-only signup
   const handleSignup = async () => {
@@ -174,7 +174,7 @@ export default function WaitlistModal({
             {result?.referral_code && (
               <div className="p-4 border border-tc-green/20 rounded-lg bg-tc-green/5 mb-6">
                 <p className="text-sm text-tc-green font-medium mb-2">
-                  🎁 Share & Save — Both get lifetime for $249
+                  🎁 Share & Save — Both get lifetime for $399
                 </p>
                 <div className="flex gap-2">
                   <input
@@ -275,7 +275,7 @@ export default function WaitlistModal({
                   </p>
                   <p className="text-tc-text-dim text-sm">
                     <span className="line-through text-tc-text-dim/50">$499</span>{" "}
-                    <span className="text-tc-green font-bold">$249</span> one-time — access forever.
+                    <span className="text-tc-green font-bold">$399</span> one-time — access forever.
                   </p>
                 </div>
               ) : (

@@ -10,7 +10,7 @@ function getSupabase() {
 
 const COINPAY_API = "https://coinpayportal.com/api";
 const PRICE_FULL = 499;
-const PRICE_REFERRAL = 249;
+const PRICE_REFERRAL = 399;
 
 function generateReferralCode(): string {
   return Math.random().toString(36).substring(2, 10);

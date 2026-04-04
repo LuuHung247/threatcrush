@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
 
     console.log(`[webhook] Payment confirmed for ${entry.email}`);
 
-    // If this user was referred, update the referrer's price to $249 too
+    // If this user was referred, update the referrer's price to $399 too
     const { data: fullEntry } = await supabase
       .from("waitlist")
       .select("referred_by")
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     if (fullEntry?.referred_by) {
       await supabase
         .from("waitlist")
-        .update({ amount_usd: 249 })
+        .update({ amount_usd: 399 })
         .eq("referral_code", fullEntry.referred_by)
         .eq("paid", false);
 

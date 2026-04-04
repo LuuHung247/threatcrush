@@ -315,7 +315,7 @@ GET    /api/modules/:name/download  # Download module package
 
 | Tier | Price | Includes |
 |------|-------|----------|
-| Lifetime Access | $499 (or $249 with referral) | All core modules, CLI, daemon, API, lifetime updates |
+| Lifetime Access | $499 (or $399 with referral) | All core modules, CLI, daemon, API, lifetime updates |
 | Module Store | Free to browse | Community modules free or paid per-module |
 | Enterprise | Contact us | Custom modules, priority support, SLA |
 

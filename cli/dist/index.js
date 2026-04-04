@@ -3896,7 +3896,7 @@ async function emailGate() {
     console.log(source_default.dim(`  Referral code: ${source_default.white(result.referral_code)}`));
     console.log(source_default.dim(`  Share: ${API_URL}?ref=${result.referral_code}`));
     console.log(source_default.green(`
-  \u{1F381} Refer a friend \u2192 both get lifetime access for $249 (instead of $499)
+  \u{1F381} Refer a friend \u2192 both get $100 off \u2014 $399 instead of $499
 `));
   } else {
     console.log(source_default.green(`
@@ -3938,7 +3938,7 @@ program2.name("threatcrush").description(
   ${source_default.dim("Website:")}  ${source_default.green("https://threatcrush.com")}
   ${source_default.dim("GitHub:")}   ${source_default.green("https://github.com/profullstack/threatcrush")}
   ${source_default.dim("npm:")}      ${source_default.green("https://www.npmjs.com/package/@profullstack/threatcrush")}
-  ${source_default.dim("License:")}  ${source_default.green("$499 lifetime")} (or $249 with referral)
+  ${source_default.dim("License:")}  ${source_default.green("$499 lifetime")} (or $399 with referral)
 
 ${source_default.dim("Examples:")}
   ${source_default.green("$")} threatcrush monitor          ${source_default.dim("# Real-time monitoring")}

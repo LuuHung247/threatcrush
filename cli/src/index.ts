@@ -66,7 +66,7 @@ async function emailGate(): Promise<boolean> {
     console.log(chalk.green(`\n  ✓ You're on the list!`));
     console.log(chalk.dim(`  Referral code: ${chalk.white(result.referral_code)}`));
     console.log(chalk.dim(`  Share: ${API_URL}?ref=${result.referral_code}`));
-    console.log(chalk.green(`\n  🎁 Refer a friend → both get lifetime access for $249 (instead of $499)\n`));
+    console.log(chalk.green(`\n  🎁 Refer a friend → both get $100 off — $399 instead of $499\n`));
   } else {
     console.log(chalk.green(`\n  ✓ Thanks! We'll notify you when ThreatCrush launches.\n`));
   }
@@ -110,7 +110,7 @@ program
   ${chalk.dim("Website:")}  ${chalk.green("https://threatcrush.com")}
   ${chalk.dim("GitHub:")}   ${chalk.green("https://github.com/profullstack/threatcrush")}
   ${chalk.dim("npm:")}      ${chalk.green("https://www.npmjs.com/package/@profullstack/threatcrush")}
-  ${chalk.dim("License:")}  ${chalk.green("$499 lifetime")} (or $249 with referral)
+  ${chalk.dim("License:")}  ${chalk.green("$499 lifetime")} (or $399 with referral)
 
 ${chalk.dim("Examples:")}
   ${chalk.green("$")} threatcrush monitor          ${chalk.dim("# Real-time monitoring")}
