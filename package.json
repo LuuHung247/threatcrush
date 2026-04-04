@@ -40,5 +40,8 @@
       "electron",
       "esbuild"
     ]
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
