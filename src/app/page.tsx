@@ -59,6 +59,10 @@ const faqs = [
     q: "Is the API included in Lifetime Access?",
     a: "Yes. Full API access with generous rate limits is included. Enterprise rate limits available on request.",
   },
+  {
+    q: "How does the referral program work?",
+    a: "After signing up, you get a unique referral link. Share it with a friend — when they join, you both pay $249 instead of $499. There's no limit on referrals. Each friend you refer saves you both $250.",
+  },
 ];
 
 const included = [
@@ -264,6 +268,7 @@ export default function Home() {
                     <span className="text-tc-text-dim text-lg">/once</span>
                   </div>
                   <p className="text-tc-text-dim mt-2">Pay once, access forever. No recurring fees.</p>
+                  <p className="text-tc-green text-sm mt-1 font-medium">🎁 Refer a friend → both get it for $249</p>
                 </div>
 
                 <ul className="space-y-3 mb-8">
@@ -289,6 +294,54 @@ export default function Home() {
                   <span>·</span>
                   <span>🔒 30-day refund</span>
                 </div>
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* ─── Referral Program ─── */}
+        <section className="py-24 sm:py-32 border-t border-tc-border">
+          <div className="mx-auto max-w-3xl px-6">
+            <ScrollReveal>
+              <div className="text-center mb-12">
+                <p className="font-mono text-sm text-tc-green mb-3 tracking-wider">// REFER &amp; SAVE</p>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                  Bring a Friend. <span className="text-tc-green glow-green">Both Save $250.</span>
+                </h2>
+                <p className="text-tc-text-dim mt-4 max-w-xl mx-auto">
+                  Share your referral link after signing up. When your friend joins, you both get lifetime access for <strong className="text-tc-green">$249</strong> instead of $499.
+                </p>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={100}>
+              <div className="grid sm:grid-cols-3 gap-6">
+                <div className="rounded-xl border border-tc-border bg-tc-card p-6 text-center">
+                  <div className="text-3xl mb-3">🔗</div>
+                  <h3 className="font-bold text-white mb-2">1. Sign Up</h3>
+                  <p className="text-sm text-tc-text-dim">Join the waitlist and get your unique referral link.</p>
+                </div>
+                <div className="rounded-xl border border-tc-border bg-tc-card p-6 text-center">
+                  <div className="text-3xl mb-3">📤</div>
+                  <h3 className="font-bold text-white mb-2">2. Share</h3>
+                  <p className="text-sm text-tc-text-dim">Send your link to a friend who needs threat intelligence.</p>
+                </div>
+                <div className="rounded-xl border border-tc-border bg-tc-card p-6 text-center">
+                  <div className="text-3xl mb-3">💰</div>
+                  <h3 className="font-bold text-white mb-2">3. Both Save</h3>
+                  <p className="text-sm text-tc-text-dim">You both pay $249 instead of $499. No limits on referrals.</p>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={200}>
+              <div className="text-center mt-10">
+                <button
+                  onClick={openModal}
+                  className="inline-block rounded-xl border border-tc-green/30 bg-tc-green/5 px-8 py-4 font-bold text-tc-green transition-all hover:bg-tc-green/10 hover:border-tc-green/50"
+                >
+                  Get Your Referral Link →
+                </button>
               </div>
             </ScrollReveal>
           </div>
