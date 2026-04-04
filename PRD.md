@@ -330,7 +330,8 @@ GET    /api/modules/:name/download  # Download module package
 | Lifetime Access | $499 (or $399 with referral) | All core modules, CLI, daemon, API, lifetime updates |
 | Module Store | Free to browse | Community modules free or paid per-module |
 | AI-Enhanced | Usage-based | Pay per AI inference — threat classification, anomaly detection, smart alerts |
-| Enterprise | Contact us | Custom modules, priority support, SLA |
+| Enterprise | Contact us | Custom modules, priority support, SLA, volume licensing |
+| Government & Defense | Contract pricing | Air-gapped, FedRAMP, FIPS 140-2, ITAR, GSA Schedule, on-prem hardware |
 
 ## Roadmap
 

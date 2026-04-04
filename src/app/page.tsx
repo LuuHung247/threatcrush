@@ -33,8 +33,8 @@ const features = [
   },
   {
     icon: "💢",
-    title: "Active Defense",
-    desc: "Fight back. Tar pits slow attackers down, honeypots trap them, deception serves fake data, and auto-reports file abuse complaints to their ISP.",
+    title: "Active Defense — Strike Back",
+    desc: "Don't just detect — retaliate. Tar pits waste attacker resources, honeypots trap and fingerprint them, deception feeds them fake credentials, and auto-reports get their servers shut down. They attack you, you make them regret it.",
   },
   {
     icon: "⚙️",
@@ -71,6 +71,10 @@ const faqs = [
   {
     q: "What about AI-enhanced modules?",
     a: "Some modules use AI for advanced threat classification, anomaly detection, and smart alerting. These are usage-based — you only pay for what you use. Your lifetime license covers the core platform; AI usage is metered separately so you're never overpaying.",
+  },
+  {
+    q: "Do you work with government agencies?",
+    a: "Yes. ThreatCrush supports air-gapped deployment, on-prem hardware appliances, and is designed for FedRAMP, FIPS 140-2, and ITAR compliance. Contact gov@threatcrush.com for GSA Schedule pricing and custom deployment.",
   },
   {
     q: "How does the referral program work?",
@@ -754,6 +758,28 @@ export default function Home() {
                   <a href="https://coinpayportal.com" target="_blank" rel="noopener noreferrer" className="hover:text-tc-green transition-colors">₿ CoinPayPortal</a>
                   <span>·</span>
                   <span>🔒 30-day refund</span>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            {/* Enterprise + Government */}
+            <ScrollReveal delay={200}>
+              <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                <div className="rounded-xl border border-tc-border bg-tc-card/40 p-6 text-center">
+                  <div className="text-2xl mb-2">🏢</div>
+                  <h3 className="text-lg font-bold text-white mb-1">Enterprise</h3>
+                  <p className="text-sm text-tc-text-dim mb-3">Custom modules, SLA, dedicated support, on-prem hardware appliances, volume licensing.</p>
+                  <a href="mailto:enterprise@threatcrush.com" className="inline-block rounded-lg border border-tc-green/30 bg-tc-green/5 px-5 py-2 text-sm font-medium text-tc-green hover:bg-tc-green/10 transition-all">
+                    Contact Sales
+                  </a>
+                </div>
+                <div className="rounded-xl border border-tc-border bg-tc-card/40 p-6 text-center">
+                  <div className="text-2xl mb-2">🏳️</div>
+                  <h3 className="text-lg font-bold text-white mb-1">Government &amp; Defense</h3>
+                  <p className="text-sm text-tc-text-dim mb-3">FedRAMP-ready, air-gapped deployment, FIPS 140-2, ITAR compliant, GSA Schedule compatible.</p>
+                  <a href="mailto:gov@threatcrush.com" className="inline-block rounded-lg border border-tc-green/30 bg-tc-green/5 px-5 py-2 text-sm font-medium text-tc-green hover:bg-tc-green/10 transition-all">
+                    Request Quote
+                  </a>
                 </div>
               </div>
             </ScrollReveal>
