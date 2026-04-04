@@ -319,6 +319,109 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ─── GET THREATCRUSH ─── */}
+        <section className="py-24 sm:py-32 border-t border-tc-border">
+          <div className="mx-auto max-w-5xl px-6">
+            <ScrollReveal>
+              <div className="text-center mb-16">
+                <p className="font-mono text-sm text-tc-green mb-3 tracking-wider">// DOWNLOAD</p>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                  Available <span className="text-tc-green glow-green">Everywhere</span>
+                </h2>
+                <p className="mt-4 text-tc-text-dim max-w-xl mx-auto">Monitor your servers from anywhere — terminal, desktop, or on the go.</p>
+              </div>
+            </ScrollReveal>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* CLI */}
+              <ScrollReveal delay={0}>
+                <div className="rounded-xl border border-tc-border bg-tc-card/60 p-6 backdrop-blur-sm hover:border-tc-green/30 transition-all h-full">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-lg bg-tc-green/10 border border-tc-green/20 flex items-center justify-center text-2xl">⚡</div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white">CLI</h3>
+                      <p className="text-xs text-tc-text-dim">Linux · macOS · Windows</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-tc-text-dim mb-4">The core agent. Runs as a systemd daemon, monitors all ports, TUI dashboard via SSH. The engine behind everything.</p>
+                  <div className="rounded-lg bg-black/60 border border-tc-border px-3 py-2 font-mono text-xs">
+                    <span className="text-tc-text-dim">$ </span>
+                    <span className="text-tc-green">npm i -g @profullstack/threatcrush</span>
+                  </div>
+                  <div className="mt-3 flex gap-2">
+                    <a href="https://www.npmjs.com/package/@profullstack/threatcrush" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-lg border border-tc-green/30 bg-tc-green/5 px-3 py-1.5 text-xs font-medium text-tc-green hover:bg-tc-green/10 transition-all">
+                      <span>📦</span> npm
+                    </a>
+                    <a href="https://github.com/profullstack/threatcrush" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-lg border border-tc-border px-3 py-1.5 text-xs font-medium text-tc-text-dim hover:border-tc-green/30 hover:text-tc-green transition-all">
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                      Source
+                    </a>
+                  </div>
+                </div>
+              </ScrollReveal>
+
+              {/* Desktop */}
+              <ScrollReveal delay={100}>
+                <div className="rounded-xl border border-tc-border bg-tc-card/60 p-6 backdrop-blur-sm hover:border-tc-green/30 transition-all h-full">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-lg bg-tc-green/10 border border-tc-green/20 flex items-center justify-center text-2xl">🖥️</div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white">Desktop</h3>
+                      <p className="text-xs text-tc-text-dim">macOS · Windows · Linux</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-tc-text-dim mb-4">Full dashboard with real-time event stream, module management, and threat analytics. E2E encrypted connection to your daemon.</p>
+                  <div className="flex gap-2 flex-wrap">
+                    <span className="inline-flex items-center gap-1.5 rounded-lg border border-tc-border px-3 py-1.5 text-xs text-tc-text-dim">
+                      🍎 macOS
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-lg border border-tc-border px-3 py-1.5 text-xs text-tc-text-dim">
+                      🪟 Windows
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-lg border border-tc-border px-3 py-1.5 text-xs text-tc-text-dim">
+                      🐧 Linux
+                    </span>
+                  </div>
+                  <p className="mt-3 text-xs text-tc-green font-mono">Coming soon</p>
+                </div>
+              </ScrollReveal>
+
+              {/* Mobile */}
+              <ScrollReveal delay={200}>
+                <div className="rounded-xl border border-tc-border bg-tc-card/60 p-6 backdrop-blur-sm hover:border-tc-green/30 transition-all h-full">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-lg bg-tc-green/10 border border-tc-green/20 flex items-center justify-center text-2xl">📱</div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white">Mobile</h3>
+                      <p className="text-xs text-tc-text-dim">iOS · Android</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-tc-text-dim mb-4">Get instant push alerts when threats are detected. Monitor dashboards, manage modules, and check server status from anywhere.</p>
+                  <div className="flex gap-2 flex-wrap">
+                    <span className="inline-flex items-center gap-1.5 rounded-lg border border-tc-border px-3 py-1.5 text-xs text-tc-text-dim">
+                      🍎 App Store
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-lg border border-tc-border px-3 py-1.5 text-xs text-tc-text-dim">
+                      🤖 Google Play
+                    </span>
+                  </div>
+                  <p className="mt-3 text-xs text-tc-green font-mono">Coming soon</p>
+                </div>
+              </ScrollReveal>
+            </div>
+
+            {/* E2E notice */}
+            <ScrollReveal delay={300}>
+              <div className="mt-10 text-center">
+                <p className="inline-flex items-center gap-2 rounded-full border border-tc-green/20 bg-tc-green/5 px-4 py-2 text-sm text-tc-text-dim">
+                  <span className="text-tc-green">🔒</span>
+                  All apps connect via <span className="text-tc-green font-medium">end-to-end encryption</span> — your vulnerability data never touches our servers unencrypted.
+                </p>
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
         {/* ─── PRICING ─── */}
         <section id="pricing" className="py-24 sm:py-32 border-t border-tc-border matrix-bg">
           <div className="mx-auto max-w-2xl px-6">
