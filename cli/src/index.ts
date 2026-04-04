@@ -66,7 +66,7 @@ async function emailGate(): Promise<boolean> {
     console.log(chalk.green(`\n  ✓ You're on the list!`));
     console.log(chalk.dim(`  Referral code: ${chalk.white(result.referral_code)}`));
     console.log(chalk.dim(`  Share: ${API_URL}?ref=${result.referral_code}`));
-    console.log(chalk.green(`\n  🎁 Refer a friend → they save $100, you earn $100 cash per referral\n`));
+    console.log(chalk.green(`\n  🎁 Refer a friend → they save $100, you earn $100 in crypto via CoinPayPortal\n`));
   } else {
     console.log(chalk.green(`\n  ✓ Thanks! We'll notify you when ThreatCrush launches.\n`));
   }

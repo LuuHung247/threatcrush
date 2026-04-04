@@ -3896,7 +3896,7 @@ async function emailGate() {
     console.log(source_default.dim(`  Referral code: ${source_default.white(result.referral_code)}`));
     console.log(source_default.dim(`  Share: ${API_URL}?ref=${result.referral_code}`));
     console.log(source_default.green(`
-  \u{1F381} Refer a friend \u2192 they save $100, you earn $100 cash per referral
+  \u{1F381} Refer a friend \u2192 they save $100, you earn $100 in crypto via CoinPayPortal
 `));
   } else {
     console.log(source_default.green(`

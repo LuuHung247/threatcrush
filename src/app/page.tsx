@@ -65,7 +65,7 @@ const faqs = [
   },
   {
     q: "How does the referral program work?",
-    a: "After signing up, you get a unique referral link. Your friend pays $399 ($100 off), and you earn $100 cash for every paid referral. No limits — refer 5 friends and you've paid for your own license. You must be a paying member to earn referral payouts.",
+    a: "After signing up, you get a unique referral link. Your friend pays $399 ($100 off), and you earn $100 per referral, paid out in crypto via <a href='https://coinpayportal.com' target='_blank' rel='noopener noreferrer' class='text-tc-green hover:underline'>CoinPayPortal</a> (BTC, ETH, USDT, SOL). No limits — refer 5 friends and you've paid for your own license. Must be a paying member to earn.",
   },
 ];
 
@@ -716,7 +716,7 @@ export default function Home() {
                   Bring a Friend. <span className="text-tc-green glow-green">Both Save $250.</span>
                 </h2>
                 <p className="text-tc-text-dim mt-4 max-w-xl mx-auto">
-                  Share your referral link after signing up. When your friend joins, your friend gets lifetime access for <strong className="text-tc-green">$399</strong> and you earn <strong className="text-tc-green">$100 cash</strong> per referral. Refer 5 friends = free license.
+                  Share your referral link after signing up. When your friend joins, your friend gets lifetime access for <strong className="text-tc-green">$399</strong> and you earn <strong className="text-tc-green">$100 in crypto</strong> per referral via CoinPayPortal. Refer 5 friends = free license.
                 </p>
               </div>
             </ScrollReveal>
@@ -736,7 +736,7 @@ export default function Home() {
                 <div className="rounded-xl border border-tc-border bg-tc-card p-6 text-center">
                   <div className="text-3xl mb-3">💰</div>
                   <h3 className="font-bold text-white mb-2">3. Both Save</h3>
-                  <p className="text-sm text-tc-text-dim">They pay $399, you earn $100 cash. No limits. Must be a paying member to earn.</p>
+                  <p className="text-sm text-tc-text-dim">They pay $399, you earn $100 in crypto (BTC/ETH/USDT/SOL). No limits.</p>
                 </div>
               </div>
             </ScrollReveal>
