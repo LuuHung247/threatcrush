@@ -153,92 +153,30 @@ All hardware includes lifetime software updates. No subscriptions. Same module m
 
 ---
 
-### Data Center & Cloud Deployment
+### How You Deploy It
 
-The hardware isn't just for small offices. Here's how ThreatCrush deploys at scale:
+Dead simple. Plug in the device, SSH in, done.
 
-#### SPAN/Mirror Port Monitoring
-```
-[Core Switch] ──SPAN port──→ [ThreatCrush Rack/Mini]
-     │                              │
-     ├── All traffic mirrored       ├── Passive monitoring (no inline risk)
-     ├── No latency impact          ├── Full packet capture
-     └── Works with any switch      └── DPI + threat detection
-```
-Plug into any managed switch's SPAN/mirror port. See all traffic without being inline. Zero risk to production.
-
-#### Virtual Appliance (VM / Docker)
 ```bash
-# Docker — runs anywhere
-docker run -d --net=host --name threatcrush \
-  -v /var/log:/var/log:ro \
-  -v /etc/threatcrush:/etc/threatcrush \
-  ghcr.io/profullstack/threatcrush:latest
+# 1. Plug ThreatCrush Stick/Mini into your server or network
+# 2. SSH into the device (it gets an IP via DHCP or USB gadget mode)
+ssh threatcrush@threatcrush.local
 
-# Or as a VM image (OVA/QCOW2)
-# Download from threatcrush.com/downloads
-```
-For cloud VMs and hypervisors where you can't plug in hardware. Same daemon, same modules, same dashboard.
+# 3. It auto-detects your setup on first boot
+threatcrush status
+# ✓ Monitoring all ports · nginx · sshd · postgres
+# ✓ 6 modules active · 0 threats · uptime 3m
 
-#### Cloud VPC Integration
-| Cloud | How |
-|-------|-----|
-| **AWS** | VPC Flow Logs → ThreatCrush agent on EC2, or Traffic Mirroring to dedicated instance |
-| **GCP** | Packet Mirroring → ThreatCrush VM, or agent on each GCE instance |
-| **Azure** | NSG Flow Logs + vTAP → ThreatCrush VM |
-| **DigitalOcean** | Agent on each droplet, or dedicated monitoring droplet |
-| **Hetzner/OVH** | Agent per server (most common for bare metal) |
-
-#### Kubernetes / Container Orchestration
-```yaml
-# DaemonSet — runs on every node
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: threatcrush
-spec:
-  selector:
-    matchLabels:
-      app: threatcrush
-  template:
-    spec:
-      hostNetwork: true
-      containers:
-      - name: threatcrush
-        image: ghcr.io/profullstack/threatcrush:latest
-        securityContext:
-          capabilities:
-            add: ["NET_RAW", "NET_ADMIN", "SYS_PTRACE"]
-        volumeMounts:
-        - name: logs
-          mountPath: /var/log
-          readOnly: true
-      volumes:
-      - name: logs
-        hostPath:
-          path: /var/log
+# That's it. You're protected.
 ```
 
-#### Deployment Matrix
+**No cloud accounts.** No integrations. No config files to edit. No Docker. No Kubernetes.
 
-| Environment | Recommended | Form Factor |
-|-------------|-------------|-------------|
-| Homelab / small office | Plug-and-play | ThreatCrush Mini ($249) |
-| Single server | USB agent | ThreatCrush Stick ($99) |
-| Remote office | Ship & plug | ThreatCrush Stick ($99) |
-| Colo / rack | SPAN port | ThreatCrush Rack ($2,499+) |
-| Cloud VPS | Software agent | Docker / systemd ($499 license) |
-| AWS / GCP / Azure | VPC integration | VM + Flow Logs ($499 license) |
-| Kubernetes | DaemonSet | Container image ($499/cluster) |
-| Air-gapped | Offline mode | Any hardware (updates via USB) |
+Just plug it in and SSH. The device ships pre-configured with all core modules running.
 
-#### Air-Gapped / Offline Mode
-For classified or regulated environments:
-- All processing on-device, no internet required
-- Signature updates via USB drive
-- Logs encrypted at rest (AES-256)
-- FIPS 140-2 compliant mode (future)
-- No telemetry, no phone-home, no cloud dependency
+Want to customize? `threatcrush tui` gives you the full dashboard over SSH.
+
+Cloud integrations (AWS VPC, Docker, K8s DaemonSets) are future scope for enterprise customers.
 
 ---
 
