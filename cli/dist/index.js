@@ -3840,6 +3840,15 @@ var source_default = chalk;
 
 // src/index.ts
 var import_readline = __toESM(require("readline"));
+var import_node_child_process = require("child_process");
+var import_node_fs = require("fs");
+var import_node_path = require("path");
+var PKG_VERSION = "0.1.8";
+try {
+  const pkg = JSON.parse((0, import_node_fs.readFileSync)((0, import_node_path.join)(__dirname, "..", "package.json"), "utf-8"));
+  PKG_VERSION = pkg.version;
+} catch {
+}
 var LOGO = `
 ${source_default.green("  \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2557  \u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557")}
 ${source_default.green("  \u255A\u2550\u2550\u2588\u2588\u2554\u2550\u2550\u255D\u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255D\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u255A\u2550\u2550\u2588\u2588\u2554\u2550\u2550\u255D")}
@@ -3850,6 +3859,7 @@ ${source_default.green("     \u255A\u2550\u255D   \u255A\u2550\u255D  \u255A\u25
 ${source_default.dim("                    C R U S H")}
 `;
 var API_URL = process.env.THREATCRUSH_API_URL || "https://threatcrush.com";
+var PKG_NAME = "@profullstack/threatcrush";
 async function promptEmail() {
   const rl = import_readline.default.createInterface({ input: process.stdin, output: process.stdout });
   return new Promise((resolve) => {
@@ -3895,15 +3905,76 @@ async function emailGate() {
   }
   return true;
 }
+function detectPackageManager() {
+  try {
+    const npmGlobal = (0, import_node_child_process.execSync)("npm ls -g --depth=0 --json 2>/dev/null", { encoding: "utf-8" });
+    if (npmGlobal.includes(PKG_NAME)) return "npm";
+  } catch {
+  }
+  try {
+    (0, import_node_child_process.execSync)("pnpm --version", { stdio: "pipe" });
+    return "pnpm";
+  } catch {
+  }
+  try {
+    (0, import_node_child_process.execSync)("yarn --version", { stdio: "pipe" });
+    return "yarn";
+  } catch {
+  }
+  try {
+    (0, import_node_child_process.execSync)("bun --version", { stdio: "pipe" });
+    return "bun";
+  } catch {
+  }
+  return "npm";
+}
 var program2 = new Command();
-program2.name("threatcrush").description("All-in-one security agent \u2014 monitor, detect, scan, protect").version("0.1.0");
-var gatedCommand = (name, desc) => {
-  program2.command(name).description(desc).action(async () => {
+program2.name("threatcrush").description(
+  `${source_default.green("\u26A1 ThreatCrush")} \u2014 All-in-one security agent
+
+  Monitor every connection on every port. Detect live attacks,
+  scan your code, pentest your APIs, and alert you in real-time.
+
+  ${source_default.dim("Website:")}  ${source_default.green("https://threatcrush.com")}
+  ${source_default.dim("GitHub:")}   ${source_default.green("https://github.com/profullstack/threatcrush")}
+  ${source_default.dim("npm:")}      ${source_default.green("https://www.npmjs.com/package/@profullstack/threatcrush")}
+  ${source_default.dim("License:")}  ${source_default.green("$499 lifetime")} (or $249 with referral)
+
+${source_default.dim("Examples:")}
+  ${source_default.green("$")} threatcrush monitor          ${source_default.dim("# Real-time monitoring")}
+  ${source_default.green("$")} threatcrush tui              ${source_default.dim("# Interactive dashboard")}
+  ${source_default.green("$")} threatcrush scan ./src       ${source_default.dim("# Scan code for vulns")}
+  ${source_default.green("$")} threatcrush pentest URL      ${source_default.dim("# Pen test a URL")}
+  ${source_default.green("$")} threatcrush modules install  ${source_default.dim("# Install a module")}
+  ${source_default.green("$")} threatcrush update           ${source_default.dim("# Update to latest")}
+  ${source_default.green("$")} threatcrush remove           ${source_default.dim("# Uninstall completely")}`
+).version(PKG_VERSION, "-v, --version", "Show version number").helpOption("-h, --help", "Show this help").addHelpText("after", `
+${source_default.dim("\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500")}
+${source_default.dim("Modules:")}
+  ThreatCrush uses pluggable security modules. Core modules included:
+  ${source_default.green("network-monitor")}  All TCP/UDP traffic, port scans, SYN floods
+  ${source_default.green("log-watcher")}      nginx, Apache, syslog, journald
+  ${source_default.green("ssh-guard")}        Failed logins, brute force, tunneling
+  ${source_default.green("code-scanner")}     Vulnerabilities, secrets, dependency CVEs
+  ${source_default.green("pentest-engine")}   SQLi, XSS, SSRF, API fuzzing
+  ${source_default.green("dns-monitor")}      DNS tunneling, DGA detection
+  ${source_default.green("firewall-rules")}   Auto-blocks via iptables/nftables
+  ${source_default.green("alert-system")}     Slack, Discord, email, webhook, PagerDuty
+
+  Browse community modules: ${source_default.green("threatcrush store")}
+`);
+var gatedCommand = (name, desc, aliases) => {
+  const cmd = program2.command(name).description(desc).action(async () => {
     await emailGate();
   });
+  if (aliases) {
+    for (const alias of aliases) {
+      cmd.alias(alias);
+    }
+  }
 };
 gatedCommand("monitor", "Real-time security monitoring (all ports, all protocols)");
-gatedCommand("tui", "Interactive security dashboard (htop for security)");
+gatedCommand("tui", "Interactive security dashboard (htop for security)", ["dashboard"]);
 gatedCommand("init", "Auto-detect services and configure ThreatCrush");
 gatedCommand("scan", "Scan codebase for vulnerabilities and secrets");
 gatedCommand("pentest", "Penetration test URLs and APIs");
@@ -3911,16 +3982,94 @@ gatedCommand("status", "Show daemon status and loaded modules");
 gatedCommand("start", "Start the ThreatCrush daemon");
 gatedCommand("stop", "Stop the ThreatCrush daemon");
 gatedCommand("logs", "Tail daemon logs");
-gatedCommand("update", "Update CLI and all installed modules");
 gatedCommand("activate", "Activate your license key");
-program2.command("modules").description("Manage security modules").argument("[action]", "list | install | remove | available").argument("[name]", "module name").action(async () => {
+program2.command("update").description("Update ThreatCrush CLI and all installed modules").option("--cli", "Update CLI only").option("--modules", "Update modules only").action(async (opts) => {
+  console.log(LOGO);
+  if (opts.modules) {
+    console.log(source_default.yellow("  Module updates coming soon.\n"));
+    return;
+  }
+  const pm = detectPackageManager();
+  console.log(source_default.dim(`  Detected package manager: ${pm}
+`));
+  const commands = {
+    npm: `npm update -g ${PKG_NAME}`,
+    pnpm: `pnpm update -g ${PKG_NAME}`,
+    yarn: `yarn global upgrade ${PKG_NAME}`,
+    bun: `bun update -g ${PKG_NAME}`
+  };
+  const cmd = commands[pm] || commands.npm;
+  console.log(source_default.green(`  \u2192 ${cmd}
+`));
+  try {
+    (0, import_node_child_process.execSync)(cmd, { stdio: "inherit" });
+    console.log(source_default.green("\n  \u2713 ThreatCrush updated successfully!\n"));
+    try {
+      const newVersion = (0, import_node_child_process.execSync)(`${pm === "npm" ? "npm" : pm} list -g ${PKG_NAME} --depth=0`, {
+        encoding: "utf-8",
+        stdio: ["pipe", "pipe", "pipe"]
+      });
+      const match = newVersion.match(/@[\d.]+/);
+      if (match) {
+        console.log(source_default.dim(`  Version: ${match[0]}
+`));
+      }
+    } catch {
+    }
+  } catch (err) {
+    console.log(source_default.red("\n  \u2717 Update failed. Try manually:\n"));
+    console.log(source_default.dim(`    ${cmd}
+`));
+  }
+});
+program2.command("remove").description("Uninstall ThreatCrush CLI completely").alias("uninstall").action(async () => {
+  console.log(LOGO);
+  const rl = import_readline.default.createInterface({ input: process.stdin, output: process.stdout });
+  const confirm = await new Promise((resolve) => {
+    rl.question(source_default.yellow("  Are you sure you want to uninstall ThreatCrush? (y/N): "), (answer) => {
+      rl.close();
+      resolve(answer.trim().toLowerCase());
+    });
+  });
+  if (confirm !== "y" && confirm !== "yes") {
+    console.log(source_default.dim("\n  Cancelled.\n"));
+    return;
+  }
+  const pm = detectPackageManager();
+  console.log(source_default.dim(`
+  Detected package manager: ${pm}
+`));
+  const commands = {
+    npm: `npm uninstall -g ${PKG_NAME}`,
+    pnpm: `pnpm remove -g ${PKG_NAME}`,
+    yarn: `yarn global remove ${PKG_NAME}`,
+    bun: `bun remove -g ${PKG_NAME}`
+  };
+  const cmd = commands[pm] || commands.npm;
+  console.log(source_default.green(`  \u2192 ${cmd}
+`));
+  try {
+    (0, import_node_child_process.execSync)(cmd, { stdio: "inherit" });
+    console.log(source_default.green("\n  \u2713 ThreatCrush has been uninstalled.\n"));
+    console.log(source_default.dim("  We're sorry to see you go! \u{1F44B}\n"));
+    console.log(source_default.dim("  Config files may remain at /etc/threatcrush/"));
+    console.log(source_default.dim("  Logs may remain at /var/log/threatcrush/"));
+    console.log(source_default.dim("  State may remain at /var/lib/threatcrush/\n"));
+  } catch (err) {
+    console.log(source_default.red("\n  \u2717 Uninstall failed. Try manually:\n"));
+    console.log(source_default.dim(`    ${cmd}
+`));
+  }
+});
+program2.command("modules").description("Manage security modules").argument("[action]", "list | install | remove | available | update").argument("[name]", "module name").action(async () => {
   await emailGate();
 });
 program2.command("store").description("Browse the module marketplace").argument("[action]", "search | info | publish").argument("[query]", "search query or module name").action(async () => {
   await emailGate();
 });
-program2.action(async () => {
-  await emailGate();
+program2.action(() => {
+  console.log(LOGO);
+  program2.help();
 });
 program2.parse();
 //# sourceMappingURL=index.js.map

@@ -16,7 +16,9 @@
     "publish:cli": "cd cli && npm publish",
     "setup:hooks": "git config core.hooksPath .githooks && git config push.followTags true && echo '\u2705 Git hooks and push.followTags configured'",
     "setup": "pnpm setup:hooks",
-    "postinstall": "git config core.hooksPath .githooks && git config push.followTags true 2>/dev/null || true"
+    "postinstall": "git config core.hooksPath .githooks && git config push.followTags true 2>/dev/null || true",
+    "release": "node scripts/release.mjs",
+    "submit-packages": "npx tsx scripts/submit-packages.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.101.1",
