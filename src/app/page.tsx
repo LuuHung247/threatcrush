@@ -29,7 +29,7 @@ const features = [
   {
     icon: "🔔",
     title: "Real-time Alerts",
-    desc: "Slack, email, and webhook notifications the instant a threat is detected. Never miss an attack.",
+    desc: "Email, SMS, Slack, Discord, and webhook notifications the instant a threat is detected. Push alerts to your phone. Never miss an attack.",
   },
   {
     icon: "⚙️",
@@ -78,7 +78,8 @@ const included = [
   "Code vulnerability scanner",
   "Automated pentest engine",
   "Network monitor — all ports, all protocols",
-  "Real-time alerts (Slack, email, webhooks)",
+  "Real-time email + SMS alerts",
+  "Webhook support for custom integrations",
   "systemd daemon — runs 24/7",
   "Full CLI, desktop & mobile apps",
   "All core modules + future updates",
