@@ -25,10 +25,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Valid email is required" }, { status: 400 });
     }
 
-    if (!["stripe", "crypto"].includes(payment_method)) {
-      return NextResponse.json({ error: "Invalid payment method" }, { status: 400 });
-    }
-
     const supabase = getSupabase();
 
     // Check for existing signup
@@ -63,7 +59,56 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Upsert waitlist entry
+    // ─── Step 1: Email-only signup (no payment_method) ───
+    if (!payment_method) {
+      // If already exists, just return existing referral code
+      if (existing) {
+        return NextResponse.json({
+          success: true,
+          waitlist_id: existing.id,
+          referral_code: existing.referral_code,
+          price,
+          discount: referredBy ? true : false,
+          existing: true,
+        });
+      }
+
+      const newReferralCode = generateReferralCode();
+      const { data: entry, error: insertError } = await supabase
+        .from("waitlist")
+        .upsert(
+          {
+            email: email.toLowerCase(),
+            paid: false,
+            referred_by: referredBy,
+            amount_usd: price,
+            referral_code: newReferralCode,
+          },
+          { onConflict: "email" }
+        )
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error("[waitlist] Insert error:", insertError);
+        return NextResponse.json({ error: "Failed to join waitlist" }, { status: 500 });
+      }
+
+      return NextResponse.json({
+        success: true,
+        waitlist_id: entry.id,
+        referral_code: newReferralCode,
+        price,
+        discount: referredBy ? true : false,
+      });
+    }
+
+    // ─── Step 2: Payment initiation (with payment_method) ───
+    if (!["stripe", "crypto"].includes(payment_method)) {
+      return NextResponse.json({ error: "Invalid payment method" }, { status: 400 });
+    }
+
+    // Upsert waitlist entry with payment method
     const newReferralCode = existing?.referral_code || generateReferralCode();
     const { data: entry, error: insertError } = await supabase
       .from("waitlist")

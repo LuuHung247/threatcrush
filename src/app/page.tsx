@@ -7,45 +7,49 @@ import WaitlistModal from "@/components/WaitlistModal";
 /* ─── Feature data ─── */
 const features = [
   {
-    icon: "📡",
-    title: "Real-time Threat Feeds",
-    desc: "Continuous stream of IOCs, malware signatures, and threat data from global honeynets and dark web sources.",
+    icon: "🔍",
+    title: "Live Attack Detection",
+    desc: "Monitors your server logs in real-time. Detects SQLi, XSS, brute force, path traversal, and RCE attempts as they happen.",
   },
   {
     icon: "🛡️",
-    title: "Vulnerability Tracking",
-    desc: "CVE monitoring with severity scoring, exploit availability tracking, and patch priority recommendations.",
+    title: "Code Security Scanner",
+    desc: "Scan your codebase for vulnerabilities, hardcoded secrets, and misconfigurations. Find problems before attackers do.",
   },
   {
-    icon: "🌐",
-    title: "Attack Surface Monitoring",
-    desc: "Discover exposed assets, shadow IT, and misconfigurations across your entire digital footprint.",
+    icon: "💥",
+    title: "Pentest Engine",
+    desc: "Automated penetration testing on your URLs and APIs. Discovers attack vectors and rates their severity.",
   },
   {
-    icon: "🎯",
-    title: "Threat Actor Intelligence",
-    desc: "TTPs, campaigns, and attribution data on APT groups, ransomware gangs, and emerging threat actors.",
-  },
-  {
-    icon: "⚡",
-    title: "API Access",
-    desc: "RESTful API with webhooks. Integrate threat data directly into your SIEM, SOAR, or custom tooling.",
+    icon: "🔀",
+    title: "Request Interceptor",
+    desc: "Inspect and analyze HTTP requests as a reverse proxy. See exactly what's hitting your server and why.",
   },
   {
     icon: "🔔",
-    title: "Custom Alerts",
-    desc: "Rule-based alerting on IOCs, CVEs, threat actors, or any indicator relevant to your environment.",
+    title: "Real-time Alerts",
+    desc: "Slack, email, and webhook notifications the instant a threat is detected. Never miss an attack.",
+  },
+  {
+    icon: "⚙️",
+    title: "systemd Daemon",
+    desc: "Runs as a background service on your server. Auto-starts on boot, monitors 24/7, zero maintenance.",
   },
 ];
 
 const faqs = [
   {
     q: "What does \"Lifetime Access\" mean?",
-    a: "Pay once, access forever. No subscriptions, no renewals. You get access to the ThreatCrush platform and all future updates for life.",
+    a: "Pay once, access forever. No subscriptions, no renewals. You get the full ThreatCrush platform — CLI, daemon, scanner, pentest engine, API — and all future updates for life.",
   },
   {
     q: "When will ThreatCrush launch?",
     a: "We're in private beta. Waitlist members get early access before public launch. Expected Q3 2026.",
+  },
+  {
+    q: "What servers does it support?",
+    a: "Any Linux server running nginx, Apache, or similar web servers. ThreatCrush auto-detects your setup during `threatcrush init`.",
   },
   {
     q: "What payment methods do you accept?",
@@ -66,12 +70,13 @@ const faqs = [
 ];
 
 const included = [
-  "Real-time threat feeds",
-  "Vulnerability tracking & CVE alerts",
-  "Attack surface monitoring",
-  "Threat actor intelligence",
-  "Full API access",
-  "Custom alert rules",
+  "Live attack detection & blocking",
+  "Code vulnerability scanner",
+  "Automated pentest engine",
+  "Request interceptor / reverse proxy",
+  "Real-time alerts (Slack, email, webhooks)",
+  "systemd daemon — runs 24/7",
+  "Full CLI & API access",
   "All future updates",
   "Priority support",
 ];
@@ -103,7 +108,7 @@ export default function Home() {
             onClick={openModal}
             className="rounded-lg bg-tc-green px-4 py-2 text-sm font-bold text-black transition-all hover:bg-tc-green-dim"
           >
-            Get Access
+            Join Waitlist
           </button>
         </div>
       </nav>
@@ -132,9 +137,9 @@ export default function Home() {
 
             <ScrollReveal delay={200}>
               <p className="mx-auto max-w-2xl text-lg sm:text-xl text-tc-text-dim mb-10 leading-relaxed">
-                Real-time threat intelligence that gives you the edge.
-                Threat feeds, vulnerability tracking, attack surface monitoring
-                — all in one platform.
+                A real-time security agent that lives on your server.
+                Monitors logs, detects attacks, scans your code, and pentests your APIs
+                — all from the command line.
               </p>
             </ScrollReveal>
 
@@ -144,7 +149,7 @@ export default function Home() {
                   onClick={openModal}
                   className="rounded-xl bg-tc-green px-8 py-4 text-lg font-bold text-black transition-all hover:bg-tc-green-dim pulse-glow"
                 >
-                  Get Lifetime Access — $499
+                  Join the Waitlist
                 </button>
                 <a
                   href="#features"
@@ -157,25 +162,27 @@ export default function Home() {
 
             <ScrollReveal delay={400}>
               <p className="mt-6 text-sm text-tc-text-dim">
-                💰 One-time payment · No subscription · Access forever
+                💰 $499 one-time · No subscription · Access forever
               </p>
             </ScrollReveal>
 
             {/* Terminal decoration */}
             <ScrollReveal delay={500}>
-              <div className="mt-16 mx-auto max-w-xl rounded-xl border border-tc-border bg-tc-card/80 p-4 text-left font-mono text-sm backdrop-blur-sm">
+              <div className="mt-16 mx-auto max-w-2xl rounded-xl border border-tc-border bg-tc-card/80 p-4 text-left font-mono text-sm backdrop-blur-sm">
                 <div className="flex items-center gap-2 mb-3 pb-2 border-b border-tc-border">
                   <span className="w-3 h-3 rounded-full bg-red-500/80" />
                   <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
                   <span className="w-3 h-3 rounded-full bg-green-500/80" />
                   <span className="text-tc-text-dim text-xs ml-2">threatcrush — zsh</span>
                 </div>
-                <div className="space-y-1 text-tc-green/80">
-                  <p><span className="text-tc-text-dim">$</span> threatcrush scan --target your-org.com</p>
-                  <p className="text-tc-text-dim">[■■■■■■■■■■] Scanning attack surface...</p>
-                  <p><span className="text-yellow-400">⚠</span> 3 critical CVEs detected</p>
-                  <p><span className="text-red-400">✗</span> 1 active threat actor targeting your sector</p>
-                  <p><span className="text-tc-green">✓</span> Alerts configured. You&apos;re protected.</p>
+                <div className="space-y-1">
+                  <p><span className="text-tc-text-dim">$</span> <span className="text-tc-green/80">threatcrush monitor --server nginx</span></p>
+                  <p><span className="text-tc-text-dim">[12:03:41]</span> <span className="text-tc-green">✓</span> <span className="text-tc-text-dim">Connected to /var/log/nginx/access.log</span></p>
+                  <p><span className="text-tc-text-dim">[12:03:42]</span> <span className="text-tc-green">✓</span> <span className="text-tc-text-dim">Loaded 847 attack signatures</span></p>
+                  <p><span className="text-tc-text-dim">[12:03:45]</span> <span className="text-yellow-400">⚠</span> <span className="text-yellow-400">SQLi attempt blocked</span> <span className="text-tc-text-dim">— 185.43.21.8 → /api/users?id=1 OR 1=1</span></p>
+                  <p><span className="text-tc-text-dim">[12:03:47]</span> <span className="text-yellow-400">⚠</span> <span className="text-yellow-400">Path traversal</span> <span className="text-tc-text-dim">— 91.232.105.3 → /../../etc/passwd</span></p>
+                  <p><span className="text-tc-text-dim">[12:03:52]</span> <span className="text-tc-green">✓</span> <span className="text-tc-text-dim">1,247 requests analyzed, 3 threats detected</span></p>
+                  <p><span className="text-tc-text-dim">[12:04:01]</span> <span className="text-yellow-400">⚠</span> <span className="text-yellow-400">Brute force</span> <span className="text-tc-text-dim">— 45.33.32.156 → 23 failed logins in 60s</span></p>
                 </div>
               </div>
             </ScrollReveal>
@@ -217,18 +224,36 @@ export default function Home() {
           <div className="mx-auto max-w-4xl px-6">
             <ScrollReveal>
               <div className="text-center mb-16">
-                <p className="font-mono text-sm text-tc-green mb-3 tracking-wider">// PROCESS</p>
+                <p className="font-mono text-sm text-tc-green mb-3 tracking-wider">// SETUP</p>
                 <h2 className="text-3xl sm:text-4xl font-bold text-white">
-                  Three Steps to <span className="text-tc-green glow-green">Total Visibility</span>
+                  Three Commands to <span className="text-tc-green glow-green">Full Protection</span>
                 </h2>
               </div>
             </ScrollReveal>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { step: "01", title: "Sign Up", desc: "Enter your email and choose your payment method.", icon: "📧" },
-                { step: "02", title: "Pay Once", desc: "One-time $499 payment. Card or crypto. Done.", icon: "💎" },
-                { step: "03", title: "Get Access", desc: "Instant access to the full ThreatCrush platform.", icon: "🚀" },
+                {
+                  step: "01",
+                  title: "Install",
+                  desc: "npm i -g threatcrush",
+                  subdesc: "or curl -sL threatcrush.com/install | sh",
+                  icon: "📦",
+                },
+                {
+                  step: "02",
+                  title: "Configure",
+                  desc: "threatcrush init",
+                  subdesc: "Auto-detects your web server, sets up monitoring",
+                  icon: "⚙️",
+                },
+                {
+                  step: "03",
+                  title: "Monitor",
+                  desc: "threatcrush monitor",
+                  subdesc: "Real-time protection, runs as a daemon",
+                  icon: "🚀",
+                },
               ].map((s, i) => (
                 <ScrollReveal key={s.step} delay={i * 150}>
                   <div className="text-center">
@@ -237,7 +262,8 @@ export default function Home() {
                     </div>
                     <div className="font-mono text-tc-green text-sm mb-2">{s.step}</div>
                     <h3 className="text-xl font-bold text-white mb-2">{s.title}</h3>
-                    <p className="text-tc-text-dim text-sm">{s.desc}</p>
+                    <code className="text-tc-green text-sm font-mono">{s.desc}</code>
+                    <p className="text-tc-text-dim text-xs mt-2">{s.subdesc}</p>
                   </div>
                 </ScrollReveal>
               ))}
@@ -267,7 +293,7 @@ export default function Home() {
                     <span className="text-5xl sm:text-6xl font-black text-white">$499</span>
                     <span className="text-tc-text-dim text-lg">/once</span>
                   </div>
-                  <p className="text-tc-text-dim mt-2">Pay once, access forever. No recurring fees.</p>
+                  <p className="text-tc-text-dim mt-2">Full platform: CLI, daemon, scanner, pentest engine, API. Pay once.</p>
                   <p className="text-tc-green text-sm mt-1 font-medium">🎁 Refer a friend → both get it for $249</p>
                 </div>
 
@@ -284,7 +310,7 @@ export default function Home() {
                   onClick={openModal}
                   className="w-full rounded-xl bg-tc-green py-4 text-lg font-bold text-black transition-all hover:bg-tc-green-dim pulse-glow"
                 >
-                  Get Lifetime Access — $499
+                  Join the Waitlist
                 </button>
 
                 <div className="flex items-center justify-center gap-4 mt-4 text-xs text-tc-text-dim">
@@ -324,7 +350,7 @@ export default function Home() {
                 <div className="rounded-xl border border-tc-border bg-tc-card p-6 text-center">
                   <div className="text-3xl mb-3">📤</div>
                   <h3 className="font-bold text-white mb-2">2. Share</h3>
-                  <p className="text-sm text-tc-text-dim">Send your link to a friend who needs threat intelligence.</p>
+                  <p className="text-sm text-tc-text-dim">Send your link to a friend who needs server security.</p>
                 </div>
                 <div className="rounded-xl border border-tc-border bg-tc-card p-6 text-center">
                   <div className="text-3xl mb-3">💰</div>
@@ -392,14 +418,14 @@ export default function Home() {
                 Ready to <span className="text-tc-green glow-green">Crush Threats</span>?
               </h2>
               <p className="text-tc-text-dim mb-8 max-w-xl mx-auto">
-                Join the waitlist now. Limited lifetime spots available at $499.
-                Price increases after launch.
+                Join the waitlist now. Your server deserves real-time protection.
+                Limited lifetime spots at $499 — price increases after launch.
               </p>
               <button
                 onClick={openModal}
                 className="rounded-xl bg-tc-green px-8 py-4 text-lg font-bold text-black transition-all hover:bg-tc-green-dim pulse-glow"
               >
-                Get Lifetime Access — $499
+                Join the Waitlist
               </button>
             </ScrollReveal>
           </div>
