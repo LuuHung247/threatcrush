@@ -148,9 +148,23 @@ export default function StoreContent() {
               <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
                 Extend <span className="text-tc-green glow-green">ThreatCrush</span>
               </h1>
-              <p className="text-tc-text-dim max-w-xl mx-auto">
-                Browse community modules to add new capabilities — scanning, monitoring, compliance, and more.
+              <p className="text-tc-text-dim max-w-2xl mx-auto">
+                This is the first real wedge for ThreatCrush: browse community modules, publish your own, and help shape the ecosystem while the deeper platform keeps maturing.
               </p>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/store/publish"
+                  className="rounded-lg bg-tc-green px-5 py-3 text-sm font-bold text-black transition-all hover:bg-tc-green-dim"
+                >
+                  Publish Module
+                </Link>
+                <Link
+                  href="/docs/modules"
+                  className="rounded-lg border border-tc-border px-5 py-3 text-sm font-semibold text-tc-text-dim transition-all hover:border-tc-green/30 hover:text-tc-green"
+                >
+                  Module Docs
+                </Link>
+              </div>
             </div>
           </ScrollReveal>
 

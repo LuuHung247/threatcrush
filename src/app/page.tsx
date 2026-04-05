@@ -115,8 +115,9 @@ export default function Home() {
             </span>
           </div>
           <div className="hidden sm:flex items-center gap-6 text-sm text-tc-text-dim">
+            <a href="/store" className="text-tc-green transition-colors">Module Store</a>
+            <a href="/docs" className="hover:text-tc-green transition-colors">Docs</a>
             <a href="#features" className="hover:text-tc-green transition-colors">Features</a>
-            <a href="/store" className="hover:text-tc-green transition-colors">Module Store</a>
             <a href="/usage" className="hover:text-tc-green transition-colors">Usage</a>
             <a href="#pricing" className="hover:text-tc-green transition-colors">Pricing</a>
             <a href="#faq" className="hover:text-tc-green transition-colors">FAQ</a>
@@ -171,10 +172,11 @@ export default function Home() {
             </ScrollReveal>
 
             <ScrollReveal delay={200}>
-              <p className="mx-auto max-w-2xl text-lg sm:text-xl text-tc-text-dim mb-10 leading-relaxed">
-                An all-in-one security agent that lives on your server.
-                Monitors every connection on every port — not just HTTP. Detects live attacks,
-                scans your code, pentests your APIs, and alerts you in real-time.
+              <p className="mx-auto max-w-3xl text-lg sm:text-xl text-tc-text-dim mb-6 leading-relaxed">
+                ThreatCrush starts with a module marketplace: discover, publish, and grow security modules first — while the broader platform, daemon, and operator workflows continue to mature.
+              </p>
+              <p className="mx-auto max-w-2xl text-base sm:text-lg text-tc-text-dim mb-10 leading-relaxed">
+                The long-term product is an all-in-one security agent for Linux servers, with desktop clients for operators. Right now, the module store is the clearest place to start.
               </p>
             </ScrollReveal>
 
@@ -192,6 +194,11 @@ export default function Home() {
                     <span className="text-tc-text-dim">$ </span>
                     <span className="text-tc-green">curl -fsSL https://threatcrush.com/install.sh | sh</span>
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-tc-text-dim text-xs opacity-0 group-hover:opacity-100 transition-opacity">📋 click to copy</span>
+                  </div>
+                  <div className="mt-3 text-left">
+                    <a href="/docs" className="text-xs font-semibold text-tc-green hover:underline">
+                      Read the docs →
+                    </a>
                   </div>
 
                   {/* Install notes */}
@@ -235,24 +242,30 @@ export default function Home() {
 
             <ScrollReveal delay={400}>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a
+                  href="/store"
+                  className="rounded-xl bg-tc-green px-8 py-4 text-lg font-bold text-black transition-all hover:bg-tc-green-dim pulse-glow"
+                >
+                  Explore Module Store
+                </a>
+                <a
+                  href="/store/publish"
+                  className="rounded-xl border border-tc-green/30 px-8 py-4 text-lg font-medium text-tc-green transition-all hover:bg-tc-green/10"
+                >
+                  Publish a Module
+                </a>
                 <button
                   onClick={openModal}
-                  className="rounded-xl bg-tc-green px-8 py-4 text-lg font-bold text-black transition-all hover:bg-tc-green-dim pulse-glow"
+                  className="rounded-xl border border-tc-border px-8 py-4 text-lg font-medium text-tc-text-dim transition-all hover:border-tc-green/30 hover:text-tc-text"
                 >
                   Join the Waitlist
                 </button>
-                <a
-                  href="#features"
-                  className="rounded-xl border border-tc-border px-8 py-4 text-lg font-medium text-tc-text-dim transition-all hover:border-tc-green/30 hover:text-tc-text"
-                >
-                  See Features ↓
-                </a>
               </div>
             </ScrollReveal>
 
             <ScrollReveal delay={500}>
               <p className="mt-6 text-sm text-tc-text-dim">
-                💰 $499 one-time · No subscription · Access forever
+                Start with the marketplace now. Broader platform rollout continues after the basic install/docs/housekeeping work.
               </p>
             </ScrollReveal>
 
@@ -311,6 +324,55 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ─── MODULE STORE FIRST ─── */}
+        <section className="py-24 sm:py-32 border-t border-tc-border">
+          <div className="mx-auto max-w-6xl px-6">
+            <ScrollReveal>
+              <div className="text-center mb-16">
+                <p className="font-mono text-sm text-tc-green mb-3 tracking-wider">// START HERE</p>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                  The <span className="text-tc-green glow-green">Module Store</span> Comes First
+                </h2>
+                <p className="mt-4 max-w-3xl mx-auto text-tc-text-dim">
+                  After the basic housekeeping work, the first real wedge for ThreatCrush is the marketplace.
+                  Discover modules, publish your own, and shape the ecosystem before the rest of the platform fills in.
+                </p>
+              </div>
+            </ScrollReveal>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                {
+                  title: "Browse modules",
+                  desc: "See what exists today in the marketplace and where the ecosystem is heading.",
+                  cta: "Open Store →",
+                  href: "/store",
+                },
+                {
+                  title: "Publish your module",
+                  desc: "Submit a repo or website URL, fetch metadata automatically, review it, then list it.",
+                  cta: "Publish Module →",
+                  href: "/store/publish",
+                },
+                {
+                  title: "Read module docs",
+                  desc: "Understand contributor expectations, listing quality, required metadata, and what’s still planned.",
+                  cta: "Module Docs →",
+                  href: "/docs/modules",
+                },
+              ].map((item, i) => (
+                <ScrollReveal key={item.title} delay={i * 100}>
+                  <a href={item.href} className="block rounded-xl border border-tc-border bg-tc-card p-6 transition-all hover:border-tc-green/30 glow-box-hover h-full">
+                    <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                    <p className="text-sm text-tc-text-dim leading-relaxed mb-5">{item.desc}</p>
+                    <span className="text-sm font-semibold text-tc-green">{item.cta}</span>
+                  </a>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ─── HOW IT WORKS ─── */}
         <section className="py-24 sm:py-32 border-t border-tc-border">
           <div className="mx-auto max-w-4xl px-6">
@@ -323,13 +385,13 @@ export default function Home() {
               </div>
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
               {[
                 {
                   step: "01",
                   title: "Install",
                   desc: "curl -fsSL https://threatcrush.com/install.sh | sh",
-                  subdesc: "Detects server vs desktop, can bootstrap with mise, then installs the right bundle cleanly",},{
+                  subdesc: "Detects server vs desktop, can bootstrap with mise, then installs the right bundle cleanly",
                   icon: "📦",
                 },
                 {
@@ -348,14 +410,14 @@ export default function Home() {
                 },
               ].map((s, i) => (
                 <ScrollReveal key={s.step} delay={i * 150}>
-                  <div className="text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full border border-tc-green/30 bg-tc-green/5 text-2xl mb-4">
+                  <div className="flex h-full flex-col items-center rounded-xl border border-tc-border bg-tc-card p-6 text-center">
+                    <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full border border-tc-green/30 bg-tc-green/5 text-2xl">
                       {s.icon}
                     </div>
-                    <div className="font-mono text-tc-green text-sm mb-2">{s.step}</div>
-                    <h3 className="text-xl font-bold text-white mb-2">{s.title}</h3>
-                    <code className="text-tc-green text-sm font-mono">{s.desc}</code>
-                    <p className="text-tc-text-dim text-xs mt-2">{s.subdesc}</p>
+                    <div className="mb-2 font-mono text-sm text-tc-green">{s.step}</div>
+                    <h3 className="mb-3 text-xl font-bold text-white">{s.title}</h3>
+                    <code className="break-words text-sm font-mono text-tc-green">{s.desc}</code>
+                    <p className="mt-3 text-xs leading-relaxed text-tc-text-dim">{s.subdesc}</p>
                   </div>
                 </ScrollReveal>
               ))}
@@ -913,6 +975,7 @@ export default function Home() {
             <div className="flex items-center gap-6 text-sm text-tc-text-dim">
               <a href="#features" className="hover:text-tc-green transition-colors">Features</a>
               <a href="/store" className="hover:text-tc-green transition-colors">Module Store</a>
+              <a href="/docs" className="hover:text-tc-green transition-colors">Docs</a>
               <a href="/usage" className="hover:text-tc-green transition-colors">Usage</a>
               <a href="#pricing" className="hover:text-tc-green transition-colors">Pricing</a>
               <a href="#faq" className="hover:text-tc-green transition-colors">FAQ</a>
