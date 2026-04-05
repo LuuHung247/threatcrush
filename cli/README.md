@@ -43,15 +43,31 @@ $ threatcrush monitor
 
 ## Install
 
+**Preferred install:**
+
 ```bash
-npm i -g @profullstack/threatcrush
+curl -fsSL https://threatcrush.com/install.sh | sh
 ```
 
-Or with your preferred package manager:
+The installer detects whether the machine is a server or desktop, uses your existing package manager when available, and can bootstrap Node.js with `mise` on bare machines.
+
+- **Server** → installs the CLI
+- **Desktop** → installs the CLI + desktop app
+
+After install, the supported lifecycle commands are:
 
 ```bash
+threatcrush update   # upgrades the installed bundle
+threatcrush remove   # removes the installed bundle
+```
+
+Manual package-manager installs still work:
+
+```bash
+npm i -g @profullstack/threatcrush
 pnpm add -g @profullstack/threatcrush
 yarn global add @profullstack/threatcrush
+bun add -g @profullstack/threatcrush
 ```
 
 ## Usage
@@ -66,7 +82,7 @@ threatcrush init         # Auto-detect services, generate config
 threatcrush status       # Show daemon status & loaded modules
 threatcrush modules      # Manage security modules
 threatcrush store        # Browse the module marketplace
-threatcrush update       # Update CLI & all modules
+threatcrush update       # Upgrade the CLI using the supported path
 ```
 
 ## Features

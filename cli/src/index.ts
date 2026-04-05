@@ -26,6 +26,8 @@ ${chalk.dim("                    C R U S H")}
 
 const API_URL = process.env.THREATCRUSH_API_URL || "https://threatcrush.com";
 const PKG_NAME = "@profullstack/threatcrush";
+const DESKTOP_PKG_NAME = "@profullstack/threatcrush-desktop";
+const INSTALL_CONFIG_PATH = join(homedir(), ".threatcrush", "install.json");
 
 // ─── Helpers ───
 
@@ -94,6 +96,61 @@ function detectPackageManager(): string {
     return "bun";
   } catch {}
   return "npm";
+}
+
+function readInstallConfig(): { installMode?: string; packageManager?: string; installMethod?: string } {
+  try {
+    return JSON.parse(readFileSync(INSTALL_CONFIG_PATH, "utf-8"));
+  } catch {
+    return {};
+  }
+}
+
+function getGlobalInstallCommand(pm: string, pkgName: string, action: "install" | "update" | "remove"): string {
+  const commands: Record<string, Record<string, string>> = {
+    npm: {
+      install: `npm i -g ${pkgName}`,
+      update: `npm update -g ${pkgName}`,
+      remove: `npm uninstall -g ${pkgName}`,
+    },
+    pnpm: {
+      install: `pnpm add -g ${pkgName}`,
+      update: `pnpm update -g ${pkgName}`,
+      remove: `pnpm remove -g ${pkgName}`,
+    },
+    yarn: {
+      install: `yarn global add ${pkgName}`,
+      update: `yarn global upgrade ${pkgName}`,
+      remove: `yarn global remove ${pkgName}`,
+    },
+    bun: {
+      install: `bun add -g ${pkgName}`,
+      update: `bun update -g ${pkgName}`,
+      remove: `bun remove -g ${pkgName}`,
+    },
+  };
+
+  return commands[pm]?.[action] || commands.npm[action];
+}
+
+function packageLooksInstalled(pm: string, pkgName: string): boolean {
+  try {
+    const listCommands: Record<string, string> = {
+      npm: `npm ls -g ${pkgName} --depth=0`,
+      pnpm: `pnpm list -g ${pkgName} --depth=0`,
+      yarn: `yarn global list --pattern ${pkgName}`,
+      bun: `bun pm ls -g`,
+    };
+
+    const output = execSync(listCommands[pm] || listCommands.npm, {
+      encoding: "utf-8",
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+
+    return output.includes(pkgName);
+  } catch {
+    return false;
+  }
 }
 
 // ─── Program ───
@@ -167,9 +224,10 @@ gatedCommand("activate", "Activate your license key");
 
 program
   .command("update")
-  .description("Update ThreatCrush CLI and all installed modules")
+  .description("Update ThreatCrush CLI and installed bundle")
   .option("--cli", "Update CLI only")
   .option("--modules", "Update modules only")
+  .option("--desktop", "Update desktop app too")
   .action(async (opts) => {
     console.log(LOGO);
 
@@ -179,42 +237,42 @@ program
     }
 
     const pm = detectPackageManager();
-    console.log(chalk.dim(`  Detected package manager: ${pm}\n`));
+    const installConfig = readInstallConfig();
+    const installMode = opts.cli ? "server" : (opts.desktop ? "desktop" : installConfig.installMode || "server");
 
-    const commands: Record<string, string> = {
-      npm: `npm update -g ${PKG_NAME}`,
-      pnpm: `pnpm update -g ${PKG_NAME}`,
-      yarn: `yarn global upgrade ${PKG_NAME}`,
-      bun: `bun update -g ${PKG_NAME}`,
-    };
+    console.log(chalk.dim(`  Detected package manager: ${pm}`));
+    console.log(chalk.dim(`  Install mode: ${installMode}\n`));
 
-    const cmd = commands[pm] || commands.npm;
-    console.log(chalk.green(`  → ${cmd}\n`));
+    const commands = [getGlobalInstallCommand(pm, PKG_NAME, "update")];
+
+    if (installMode === "desktop") {
+      commands.push(getGlobalInstallCommand(pm, DESKTOP_PKG_NAME, "update"));
+    }
 
     try {
-      execSync(cmd, { stdio: "inherit" });
-      console.log(chalk.green("\n  ✓ ThreatCrush updated successfully!\n"));
+      for (const cmd of commands) {
+        console.log(chalk.green(`  → ${cmd}\n`));
+        execSync(cmd, { stdio: "inherit" });
+      }
 
-      // Show new version
-      try {
-        const newVersion = execSync(`${pm === "npm" ? "npm" : pm} list -g ${PKG_NAME} --depth=0`, {
-          encoding: "utf-8",
-          stdio: ["pipe", "pipe", "pipe"],
-        });
-        const match = newVersion.match(/@[\d.]+/);
-        if (match) {
-          console.log(chalk.dim(`  Version: ${match[0]}\n`));
-        }
-      } catch {}
+      console.log(chalk.green("\n  ✓ ThreatCrush updated successfully!\n"));
+      if (installMode === "desktop") {
+        console.log(chalk.dim("  Updated bundle: CLI + desktop app\n"));
+      } else {
+        console.log(chalk.dim("  Updated bundle: CLI only\n"));
+      }
     } catch (err) {
       console.log(chalk.red("\n  ✗ Update failed. Try manually:\n"));
-      console.log(chalk.dim(`    ${cmd}\n`));
+      for (const cmd of commands) {
+        console.log(chalk.dim(`    ${cmd}`));
+      }
+      console.log();
     }
   });
 
 program
   .command("remove")
-  .description("Uninstall ThreatCrush CLI completely")
+  .description("Uninstall ThreatCrush and the installed bundle")
   .alias("uninstall")
   .action(async () => {
     console.log(LOGO);
@@ -233,28 +291,34 @@ program
     }
 
     const pm = detectPackageManager();
-    console.log(chalk.dim(`\n  Detected package manager: ${pm}\n`));
+    const installConfig = readInstallConfig();
+    const installMode = installConfig.installMode || "server";
+    const commands = [getGlobalInstallCommand(pm, PKG_NAME, "remove")];
 
-    const commands: Record<string, string> = {
-      npm: `npm uninstall -g ${PKG_NAME}`,
-      pnpm: `pnpm remove -g ${PKG_NAME}`,
-      yarn: `yarn global remove ${PKG_NAME}`,
-      bun: `bun remove -g ${PKG_NAME}`,
-    };
+    if (installMode === "desktop" && packageLooksInstalled(pm, DESKTOP_PKG_NAME)) {
+      commands.push(getGlobalInstallCommand(pm, DESKTOP_PKG_NAME, "remove"));
+    }
 
-    const cmd = commands[pm] || commands.npm;
-    console.log(chalk.green(`  → ${cmd}\n`));
+    console.log(chalk.dim(`\n  Detected package manager: ${pm}`));
+    console.log(chalk.dim(`  Install mode: ${installMode}\n`));
 
     try {
-      execSync(cmd, { stdio: "inherit" });
+      for (const cmd of commands) {
+        console.log(chalk.green(`  → ${cmd}\n`));
+        execSync(cmd, { stdio: "inherit" });
+      }
       console.log(chalk.green("\n  ✓ ThreatCrush has been uninstalled.\n"));
       console.log(chalk.dim("  We're sorry to see you go! 👋\n"));
       console.log(chalk.dim("  Config files may remain at /etc/threatcrush/"));
       console.log(chalk.dim("  Logs may remain at /var/log/threatcrush/"));
-      console.log(chalk.dim("  State may remain at /var/lib/threatcrush/\n"));
+      console.log(chalk.dim("  State may remain at /var/lib/threatcrush/"));
+      console.log(chalk.dim(`  Local install metadata may remain at ${INSTALL_CONFIG_PATH}\n`));
     } catch (err) {
       console.log(chalk.red("\n  ✗ Uninstall failed. Try manually:\n"));
-      console.log(chalk.dim(`    ${cmd}\n`));
+      for (const cmd of commands) {
+        console.log(chalk.dim(`    ${cmd}`));
+      }
+      console.log();
     }
   });
 

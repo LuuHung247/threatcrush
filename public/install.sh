@@ -11,169 +11,294 @@ YELLOW="\033[1;33m"
 DIM="\033[2m"
 RESET="\033[0m"
 
-echo ""
-echo "${GREEN}  ████████╗██╗  ██╗██████╗ ███████╗ █████╗ ████████╗${RESET}"
-echo "${GREEN}  ╚══██╔══╝██║  ██║██╔══██╗██╔════╝██╔══██╗╚══██╔══╝${RESET}"
-echo "${GREEN}     ██║   ███████║██████╔╝█████╗  ███████║   ██║   ${RESET}"
-echo "${GREEN}     ██║   ██╔══██║██╔══██╗██╔══╝  ██╔══██║   ██║   ${RESET}"
-echo "${GREEN}     ██║   ██║  ██║██║  ██║███████╗██║  ██║   ██║   ${RESET}"
-echo "${GREEN}     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝${RESET}"
-echo "${DIM}                    C R U S H${RESET}"
-echo ""
+PKG_NAME="@profullstack/threatcrush"
+DESKTOP_PKG_NAME="@profullstack/threatcrush-desktop"
+MISE_INSTALL_URL="https://mise.run"
+CONFIG_DIR="$HOME/.threatcrush"
+CONFIG_PATH="$CONFIG_DIR/install.json"
 
-# ─── Detect environment ───
+say() {
+  printf "%b\n" "$1"
+}
+
+say ""
+say "${GREEN}  ████████╗██╗  ██╗██████╗ ███████╗ █████╗ ████████╗${RESET}"
+say "${GREEN}  ╚══██╔══╝██║  ██║██╔══██╗██╔════╝██╔══██╗╚══██╔══╝${RESET}"
+say "${GREEN}     ██║   ███████║██████╔╝█████╗  ███████║   ██║   ${RESET}"
+say "${GREEN}     ██║   ██╔══██║██╔══██╗██╔══╝  ██╔══██║   ██║   ${RESET}"
+say "${GREEN}     ██║   ██║  ██║██║  ██║███████╗██║  ██║   ██║   ${RESET}"
+say "${GREEN}     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝${RESET}"
+say "${DIM}                    C R U S H${RESET}"
+say ""
+
+command_exists() {
+  command -v "$1" >/dev/null 2>&1
+}
+
+have_sudo() {
+  if [ "$(id -u)" -eq 0 ]; then
+    return 0
+  fi
+  command_exists sudo
+}
+
+run_cmd() {
+  if [ "$(id -u)" -eq 0 ]; then
+    "$@"
+  elif command_exists sudo; then
+    sudo "$@"
+  else
+    "$@"
+  fi
+}
 
 detect_pm() {
-  if command -v pnpm >/dev/null 2>&1; then echo "pnpm"
-  elif command -v yarn >/dev/null 2>&1; then echo "yarn"
-  elif command -v npm >/dev/null 2>&1; then echo "npm"
-  elif command -v bun >/dev/null 2>&1; then echo "bun"
+  if command_exists pnpm; then echo "pnpm"
+  elif command_exists yarn; then echo "yarn"
+  elif command_exists bun; then echo "bun"
+  elif command_exists npm; then echo "npm"
   else echo ""; fi
 }
 
 detect_node() {
-  if command -v node >/dev/null 2>&1; then node --version; else echo ""; fi
+  if command_exists node; then node --version; else echo ""; fi
 }
 
-has_docker() {
-  command -v docker >/dev/null 2>&1
+detect_os() {
+  uname -s 2>/dev/null || echo "unknown"
+}
+
+detect_install_mode() {
+  OS_NAME=$(detect_os)
+
+  case "$OS_NAME" in
+    Darwin)
+      echo "desktop"
+      return 0
+      ;;
+    MINGW*|MSYS*|CYGWIN*|Windows_NT)
+      echo "desktop"
+      return 0
+      ;;
+  esac
+
+  if [ -n "$THREATCRUSH_INSTALL_MODE" ]; then
+    echo "$THREATCRUSH_INSTALL_MODE"
+    return 0
+  fi
+
+  if [ -n "$DISPLAY" ] || [ -n "$WAYLAND_DISPLAY" ] || [ -n "$XDG_CURRENT_DESKTOP" ] || [ -n "$DESKTOP_SESSION" ]; then
+    echo "desktop"
+    return 0
+  fi
+
+  if [ -n "$SSH_CONNECTION" ] || [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    echo "server"
+    return 0
+  fi
+
+  echo "server"
+}
+
+ensure_config_dir() {
+  mkdir -p "$CONFIG_DIR"
+}
+
+write_install_config() {
+  MODE="$1"
+  PM_NAME="$2"
+  ensure_config_dir
+  cat > "$CONFIG_PATH" <<EOF
+{
+  "installMode": "$MODE",
+  "packageManager": "$PM_NAME",
+  "installMethod": "installer"
+}
+EOF
+}
+
+ensure_mise_path() {
+  if command_exists mise; then
+    return 0
+  fi
+
+  if [ -x "$HOME/.local/bin/mise" ]; then
+    PATH="$HOME/.local/bin:$PATH"
+    export PATH
+  elif [ -x "$HOME/.cargo/bin/mise" ]; then
+    PATH="$HOME/.cargo/bin:$PATH"
+    export PATH
+  fi
+
+  command_exists mise
+}
+
+install_mise() {
+  say "${YELLOW}→ No supported package manager found. Bootstrapping mise...${RESET}"
+
+  if ! command_exists curl; then
+    say "${RED}curl is required to install mise automatically.${RESET}"
+    exit 1
+  fi
+
+  sh -c "$(curl -fsSL ${MISE_INSTALL_URL})"
+
+  if ! ensure_mise_path; then
+    say "${RED}mise installed but was not found on PATH.${RESET}"
+    say "${DIM}Try opening a new shell, then re-run:${RESET} threatcrush"
+    exit 1
+  fi
+}
+
+ensure_node_with_mise() {
+  if command_exists node && command_exists npm; then
+    return 0
+  fi
+
+  install_mise
+
+  say "${GREEN}→ Installing Node.js LTS with mise...${RESET}"
+  mise use -g node@lts >/dev/null 2>&1 || mise install node@lts >/dev/null 2>&1
+  ensure_mise_path
+
+  if ! command_exists node || ! command_exists npm; then
+    say "${RED}Failed to install Node.js via mise.${RESET}"
+    exit 1
+  fi
+}
+
+ensure_global_prefix() {
+  if ! command_exists npm; then
+    return 0
+  fi
+
+  PREFIX=$(npm config get prefix 2>/dev/null || echo "")
+  case "$PREFIX" in
+    "$HOME"/*)
+      return 0
+      ;;
+    /usr/*|/opt/*)
+      if ! have_sudo; then
+        say "${YELLOW}Global npm installs may require elevated permissions on this machine.${RESET}"
+      fi
+      ;;
+  esac
+}
+
+install_global_package() {
+  PACKAGE_NAME="$1"
+  PM=$(detect_pm)
+
+  case "$PM" in
+    pnpm)
+      say "${GREEN}→ Installing ${PACKAGE_NAME} via pnpm...${RESET}"
+      pnpm add -g "$PACKAGE_NAME"
+      ;;
+    yarn)
+      say "${GREEN}→ Installing ${PACKAGE_NAME} via yarn...${RESET}"
+      yarn global add "$PACKAGE_NAME"
+      ;;
+    bun)
+      say "${GREEN}→ Installing ${PACKAGE_NAME} via bun...${RESET}"
+      bun add -g "$PACKAGE_NAME"
+      ;;
+    npm)
+      say "${GREEN}→ Installing ${PACKAGE_NAME} via npm...${RESET}"
+      ensure_global_prefix
+      if [ "$(id -u)" -eq 0 ]; then
+        npm i -g "$PACKAGE_NAME"
+      elif command_exists sudo; then
+        if npm i -g "$PACKAGE_NAME" 2>/dev/null; then
+          :
+        else
+          run_cmd npm i -g "$PACKAGE_NAME"
+        fi
+      else
+        npm i -g "$PACKAGE_NAME"
+      fi
+      ;;
+    *)
+      say "${RED}No supported package manager found even after bootstrapping Node.js.${RESET}"
+      exit 1
+      ;;
+  esac
+}
+
+install_desktop_bundle() {
+  OS_NAME=$(detect_os)
+  case "$OS_NAME" in
+    Linux|Darwin)
+      install_global_package "$DESKTOP_PKG_NAME"
+      ;;
+    *)
+      say "${YELLOW}Desktop mode detected, but automatic desktop package install is not ready on ${OS_NAME}.${RESET}"
+      say "${DIM}CLI will still be installed. Desktop packaging can be added later for this OS.${RESET}"
+      ;;
+  esac
 }
 
 NODE_VERSION=$(detect_node)
 PM=$(detect_pm)
-HAS_DOCKER=$(has_docker && echo "yes" || echo "no")
+INSTALL_MODE=$(detect_install_mode)
 
-echo "  ${DIM}Node.js:${RESET} ${NODE_VERSION:-not found}"
-echo "  ${DIM}Docker:${RESET}  ${HAS_DOCKER}"
-echo ""
+say "  ${DIM}Node.js:${RESET} ${NODE_VERSION:-not found}"
+say "  ${DIM}Package manager:${RESET} ${PM:-not found}"
+say "  ${DIM}Install mode:${RESET} ${INSTALL_MODE}"
+say "  ${DIM}Installer strategy:${RESET} curl | sh → detect server/desktop → bootstrap if needed"
+say ""
 
-# ─── Choose install method ───
-
-INSTALL_METHOD=""
-
-if [ -n "$NODE_VERSION" ] && [ "$HAS_DOCKER" = "yes" ]; then
-  # Both available — ask
-  echo "${YELLOW}How would you like to install ThreatCrush?${RESET}"
-  echo ""
-  echo "  ${GREEN}1)${RESET} Native install (npm/pnpm/yarn/bun) ${DIM}— recommended${RESET}"
-  echo "  ${GREEN}2)${RESET} Docker container"
-  echo ""
-  printf "  Choose [1/2]: "
-  
-  # Handle piped input (curl | sh) — default to native
-  if [ -t 0 ]; then
-    read -r CHOICE
-  else
-    CHOICE="1"
-    echo "1 ${DIM}(auto-selected for non-interactive)${RESET}"
-  fi
-
-  case "$CHOICE" in
-    2) INSTALL_METHOD="docker" ;;
-    *) INSTALL_METHOD="native" ;;
-  esac
-elif [ -n "$NODE_VERSION" ]; then
-  INSTALL_METHOD="native"
-elif [ "$HAS_DOCKER" = "yes" ]; then
-  echo "${DIM}No Node.js found. Installing via Docker...${RESET}"
-  INSTALL_METHOD="docker"
-else
-  echo "${RED}Neither Node.js nor Docker found.${RESET}"
-  echo ""
-  echo "Install one of:"
-  echo "  ${GREEN}Node.js:${RESET} curl -fsSL https://fnm.vercel.app/install | bash && fnm install --lts"
-  echo "  ${GREEN}Docker:${RESET}  https://docs.docker.com/get-docker/"
-  echo ""
-  exit 1
+if [ -z "$NODE_VERSION" ] || [ -z "$PM" ]; then
+  ensure_node_with_mise
+  NODE_VERSION=$(detect_node)
+  PM=$(detect_pm)
+  say "  ${DIM}Bootstrapped Node.js:${RESET} ${NODE_VERSION:-unknown}"
+  say "  ${DIM}Active package manager:${RESET} ${PM:-unknown}"
+  say ""
 fi
 
-# ─── Native install ───
+install_global_package "$PKG_NAME"
 
-install_native() {
-  PM=$(detect_pm)
-  echo ""
+if [ "$INSTALL_MODE" = "desktop" ]; then
+  say ""
+  say "${GREEN}→ Desktop machine detected. Installing desktop bundle too...${RESET}"
+  install_desktop_bundle
+fi
 
-  case "$PM" in
-    pnpm)
-      echo "${GREEN}→ Installing via pnpm...${RESET}"
-      pnpm add -g @profullstack/threatcrush
-      ;;
-    yarn)
-      echo "${GREEN}→ Installing via yarn...${RESET}"
-      yarn global add @profullstack/threatcrush
-      ;;
-    bun)
-      echo "${GREEN}→ Installing via bun...${RESET}"
-      bun add -g @profullstack/threatcrush
-      ;;
-    npm|*)
-      echo "${GREEN}→ Installing via npm...${RESET}"
-      npm i -g @profullstack/threatcrush
-      ;;
-  esac
+write_install_config "$INSTALL_MODE" "$(detect_pm)"
 
-  echo ""
-
-  if command -v threatcrush >/dev/null 2>&1; then
-    VERSION=$(threatcrush --version 2>/dev/null || echo "unknown")
-    echo "${GREEN}✓ ThreatCrush v${VERSION} installed successfully!${RESET}"
-    echo ""
-    echo "  Get started:"
-    echo "    ${GREEN}threatcrush${RESET}          ${DIM}# Setup & join waitlist${RESET}"
-    echo "    ${GREEN}threatcrush monitor${RESET}  ${DIM}# Real-time security monitoring${RESET}"
-    echo "    ${GREEN}threatcrush tui${RESET}      ${DIM}# Interactive dashboard${RESET}"
-    echo "    ${GREEN}threatcrush scan .${RESET}   ${DIM}# Scan code for vulnerabilities${RESET}"
+say ""
+if command_exists threatcrush; then
+  VERSION=$(threatcrush --version 2>/dev/null || echo "unknown")
+  say "${GREEN}✓ ThreatCrush ${VERSION} installed successfully!${RESET}"
+  say ""
+  say "  ${BOLD}Detected install mode:${RESET} ${INSTALL_MODE}"
+  say "  ${BOLD}Preferred usage:${RESET}"
+  say "    ${GREEN}threatcrush${RESET}               ${DIM}# Setup / help${RESET}"
+  say "    ${GREEN}threatcrush init${RESET}          ${DIM}# Auto-detect services and generate config${RESET}"
+  say "    ${GREEN}threatcrush monitor${RESET}       ${DIM}# Real-time monitoring${RESET}"
+  say "    ${GREEN}threatcrush update${RESET}        ${DIM}# Upgrade CLI later using the same blessed path${RESET}"
+  say "    ${GREEN}threatcrush remove${RESET}        ${DIM}# Uninstall the installed bundle${RESET}"
+  say ""
+  say "  ${BOLD}Install model:${RESET}"
+  say "    ${DIM}• Primary install:${RESET} curl -fsSL https://threatcrush.com/install.sh | sh"
+  say "    ${DIM}• Machine type:${RESET} ${INSTALL_MODE}"
+  say "    ${DIM}• Upgrades later:${RESET} threatcrush update"
+  say "    ${DIM}• Bare machines:${RESET} installer can bootstrap Node.js with mise"
+  if [ "$INSTALL_MODE" = "desktop" ]; then
+    say "    ${DIM}• Desktop bundle:${RESET} CLI + desktop app"
   else
-    echo "${RED}Installation completed but 'threatcrush' command not found in PATH.${RESET}"
-    echo "Try: ${GREEN}npx @profullstack/threatcrush${RESET}"
+    say "    ${DIM}• Server bundle:${RESET} CLI only"
   fi
-}
+else
+  say "${RED}Installation completed but 'threatcrush' was not found on PATH.${RESET}"
+  say "${DIM}Try one of these:${RESET}"
+  say "  ${GREEN}hash -r${RESET}"
+  say "  ${GREEN}exec \$SHELL -l${RESET}"
+  say "  ${GREEN}npx @profullstack/threatcrush${RESET}"
+fi
 
-# ─── Docker install ───
-
-install_docker() {
-  echo ""
-  echo "${GREEN}→ Pulling ThreatCrush Docker image...${RESET}"
-  docker pull profullstack/threatcrush:latest 2>/dev/null || {
-    echo "${YELLOW}Image not on Docker Hub yet. Building locally...${RESET}"
-    TMPDIR=$(mktemp -d)
-    cat > "$TMPDIR/Dockerfile" << 'DOCKERFILE'
-FROM node:22-alpine
-RUN npm i -g @profullstack/threatcrush
-ENTRYPOINT ["threatcrush"]
-CMD ["monitor"]
-DOCKERFILE
-    docker build -t profullstack/threatcrush:latest "$TMPDIR"
-    rm -rf "$TMPDIR"
-  }
-
-  echo ""
-  echo "${GREEN}✓ ThreatCrush Docker image ready!${RESET}"
-  echo ""
-  echo "  Get started:"
-  echo "    ${GREEN}docker run -it profullstack/threatcrush${RESET}              ${DIM}# Setup${RESET}"
-  echo "    ${GREEN}docker run -it profullstack/threatcrush monitor${RESET}      ${DIM}# Monitor${RESET}"
-  echo "    ${GREEN}docker run -it profullstack/threatcrush tui${RESET}          ${DIM}# Dashboard${RESET}"
-  echo ""
-  echo "  Run as daemon (monitor your server):"
-  echo "    ${GREEN}docker run -d --net=host --name threatcrush \\${RESET}"
-  echo "    ${GREEN}  -v /var/log:/var/log:ro \\${RESET}"
-  echo "    ${GREEN}  profullstack/threatcrush monitor${RESET}"
-  echo ""
-  echo "  ${DIM}Alias for convenience:${RESET}"
-  echo "    ${GREEN}alias threatcrush='docker run -it --rm profullstack/threatcrush'${RESET}"
-}
-
-# ─── Run ───
-
-case "$INSTALL_METHOD" in
-  docker) install_docker ;;
-  *) install_native ;;
-esac
-
-echo ""
-echo "  ${DIM}Docs:${RESET}   https://threatcrush.com"
-echo "  ${DIM}GitHub:${RESET} https://github.com/profullstack/threatcrush"
-echo "  ${DIM}npm:${RESET}    https://www.npmjs.com/package/@profullstack/threatcrush"
-echo "  ${DIM}Docker:${RESET} profullstack/threatcrush"
-echo ""
+say ""
+say "  ${DIM}Docs:${RESET}   https://threatcrush.com"
+say "  ${DIM}GitHub:${RESET} https://github.com/profullstack/threatcrush"
+say "  ${DIM}npm:${RESET}    https://www.npmjs.com/package/@profullstack/threatcrush"
+say ""

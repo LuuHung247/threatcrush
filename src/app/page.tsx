@@ -190,32 +190,44 @@ export default function Home() {
                     onClick={() => { navigator.clipboard?.writeText('curl -fsSL https://threatcrush.com/install.sh | sh'); }}
                   >
                     <span className="text-tc-text-dim">$ </span>
-                    <span className="text-tc-green">curl -fsSL threatcrush.com/install.sh | sh</span>
+                    <span className="text-tc-green">curl -fsSL https://threatcrush.com/install.sh | sh</span>
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-tc-text-dim text-xs opacity-0 group-hover:opacity-100 transition-opacity">📋 click to copy</span>
                   </div>
 
-                  {/* Package manager tabs */}
-                  <div className="mt-4 pt-4 border-t border-tc-border/50">
-                    <p className="text-xs text-tc-text-dim mb-3">Or install with your package manager:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {[
-                        { label: 'npm', cmd: 'npm i -g @profullstack/threatcrush' },
-                        { label: 'pnpm', cmd: 'pnpm add -g @profullstack/threatcrush' },
-                        { label: 'yarn', cmd: 'yarn global add @profullstack/threatcrush' },
-                        { label: 'bun', cmd: 'bun add -g @profullstack/threatcrush' },
-                      ].map((pm) => (
-                        <button
-                          key={pm.label}
-                          onClick={() => { navigator.clipboard?.writeText(pm.cmd); }}
-                          className="group/pm flex items-center gap-2 rounded-lg border border-tc-border bg-black/40 px-3 py-2 font-mono text-xs transition-all hover:border-tc-green/40 hover:bg-black/60"
-                        >
-                          <span className="text-tc-green font-semibold">{pm.label}</span>
-                          <span className="text-tc-text-dim hidden sm:inline">{pm.cmd}</span>
-                          <span className="text-tc-text-dim sm:hidden">{pm.cmd.split(' ').slice(0, 3).join(' ')}...</span>
-                          <span className="text-[10px] text-tc-text-dim opacity-0 group-hover/pm:opacity-100 transition-opacity">📋</span>
-                        </button>
-                      ))}
+                  {/* Install notes */}
+                  <div className="mt-4 pt-4 border-t border-tc-border/50 space-y-3 text-left">
+                    <div>
+                      <p className="text-xs font-semibold text-tc-text">Preferred install path</p>
+                      <p className="text-xs text-tc-text-dim mt-1">
+                        The installer detects whether this machine is a <span className="text-tc-green">server</span> or <span className="text-tc-green">desktop</span>, uses your existing package manager when available,
+                        and can bootstrap Node.js with <span className="text-tc-green">mise</span> on bare machines.
+                      </p>
+                      <p className="text-xs text-tc-text-dim mt-2">
+                        Server installs get the CLI. Desktop installs get the CLI + desktop app.
+                      </p>
                     </div>
+                    <div>
+                      <p className="text-xs font-semibold text-tc-text">Preferred lifecycle commands</p>
+                      <div className="space-y-2 mt-2">
+                        <div
+                          className="group relative rounded-lg bg-black/60 border border-tc-border px-4 py-3 font-mono text-sm cursor-pointer transition-all hover:border-tc-green/40"
+                          onClick={() => { navigator.clipboard?.writeText('threatcrush update'); }}
+                        >
+                          <span className="text-tc-green">threatcrush update</span>
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-tc-text-dim text-xs opacity-0 group-hover:opacity-100 transition-opacity">📋 click to copy</span>
+                        </div>
+                        <div
+                          className="group relative rounded-lg bg-black/60 border border-tc-border px-4 py-3 font-mono text-sm cursor-pointer transition-all hover:border-tc-green/40"
+                          onClick={() => { navigator.clipboard?.writeText('threatcrush remove'); }}
+                        >
+                          <span className="text-tc-green">threatcrush remove</span>
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-tc-text-dim text-xs opacity-0 group-hover:opacity-100 transition-opacity">📋 click to copy</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-xs text-tc-text-dim">
+                      Manual npm / pnpm / yarn / bun installs still work, but <span className="text-tc-green">curl | sh</span> is the recommended default.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -316,8 +328,8 @@ export default function Home() {
                 {
                   step: "01",
                   title: "Install",
-                  desc: "npm i -g threatcrush",
-                  subdesc: "or curl -sL threatcrush.com/install | sh",
+                  desc: "curl -fsSL https://threatcrush.com/install.sh | sh",
+                  subdesc: "Detects server vs desktop, can bootstrap with mise, then installs the right bundle cleanly",},{
                   icon: "📦",
                 },
                 {
@@ -604,10 +616,10 @@ export default function Home() {
                       <p className="text-xs text-tc-text-dim">Linux · macOS · Windows</p>
                     </div>
                   </div>
-                  <p className="text-sm text-tc-text-dim mb-4">The core agent. Runs as a systemd daemon, monitors all ports, TUI dashboard via SSH. The engine behind everything.</p>
+                  <p className="text-sm text-tc-text-dim mb-4">The core agent. On servers, the installer gives you the CLI. On desktops, it can install the CLI + desktop app together.</p>
                   <div className="rounded-lg bg-black/60 border border-tc-border px-3 py-2 font-mono text-xs">
                     <span className="text-tc-text-dim">$ </span>
-                    <span className="text-tc-green">npm i -g @profullstack/threatcrush</span>
+                    <span className="text-tc-green">curl -fsSL https://threatcrush.com/install.sh | sh</span>
                   </div>
                   <div className="mt-3 flex gap-2">
                     <a href="https://www.npmjs.com/package/@profullstack/threatcrush" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-lg border border-tc-green/30 bg-tc-green/5 px-3 py-1.5 text-xs font-medium text-tc-green hover:bg-tc-green/10 transition-all">
