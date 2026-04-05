@@ -197,6 +197,9 @@ export default function DocsPage() {
             <Link href="/docs/modules" className="rounded-lg bg-tc-green px-5 py-3 font-semibold text-black hover:bg-tc-green-dim">
               Read module docs →
             </Link>
+            <Link href="/docs/releases" className="rounded-lg border border-tc-border px-5 py-3 font-semibold text-tc-text-dim hover:border-tc-green/30 hover:text-tc-green">
+              Release automation docs
+            </Link>
             <Link href="/store" className="rounded-lg border border-tc-border px-5 py-3 font-semibold text-tc-text-dim hover:border-tc-green/30 hover:text-tc-green">
               Browse module store
             </Link>

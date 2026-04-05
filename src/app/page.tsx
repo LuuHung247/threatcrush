@@ -99,6 +99,7 @@ const included = [
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const openModal = () => setModalOpen(true);
 
@@ -108,13 +109,13 @@ export default function Home() {
 
       {/* ─── NAV ─── */}
       <nav className="fixed top-0 left-0 right-0 z-40 border-b border-tc-border/50 bg-tc-darker/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
           <div className="flex items-center gap-2">
             <span className="text-xl font-bold text-tc-green glow-green font-mono">
               ⚡ ThreatCrush
             </span>
           </div>
-          <div className="hidden sm:flex items-center gap-6 text-sm text-tc-text-dim">
+          <div className="hidden lg:flex items-center gap-6 text-sm text-tc-text-dim">
             <a href="/store" className="text-tc-green transition-colors">Module Store</a>
             <a href="/docs" className="hover:text-tc-green transition-colors">Docs</a>
             <a href="#features" className="hover:text-tc-green transition-colors">Features</a>
@@ -126,27 +127,69 @@ export default function Home() {
               GitHub
             </a>
           </div>
-          <div className="flex items-center gap-3">
-            <a
-              href="/auth/login"
-              className="text-sm text-tc-text-dim hover:text-tc-green transition-colors"
-            >
-              Log In
-            </a>
+          <div className="flex items-center gap-2 sm:gap-3">
             <a
               href="/auth/signup"
-              className="rounded-lg bg-tc-green px-4 py-2 text-sm font-bold text-black transition-all hover:bg-tc-green-dim"
+              className="rounded-lg bg-tc-green px-3 py-2 text-sm font-bold text-black transition-all hover:bg-tc-green-dim sm:px-4"
             >
               Sign Up
             </a>
             <button
-              onClick={openModal}
-              className="rounded-lg border border-tc-green/30 px-4 py-2 text-sm font-bold text-tc-green transition-all hover:bg-tc-green/10"
+              type="button"
+              onClick={() => setMobileNavOpen((open) => !open)}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-tc-border text-tc-text-dim transition-all hover:border-tc-green/30 hover:text-tc-green lg:hidden"
+              aria-label="Toggle navigation menu"
+              aria-expanded={mobileNavOpen}
             >
-              Join Waitlist
+              <span className="text-lg">{mobileNavOpen ? "✕" : "☰"}</span>
             </button>
+            <div className="hidden lg:flex items-center gap-3">
+              <a
+                href="/auth/login"
+                className="text-sm text-tc-text-dim hover:text-tc-green transition-colors"
+              >
+                Log In
+              </a>
+              <button
+                onClick={openModal}
+                className="rounded-lg border border-tc-green/30 px-4 py-2 text-sm font-bold text-tc-green transition-all hover:bg-tc-green/10"
+              >
+                Join Waitlist
+              </button>
+            </div>
           </div>
         </div>
+        {mobileNavOpen && (
+          <div className="border-t border-tc-border/50 bg-tc-darker/95 px-4 py-4 lg:hidden">
+            <div className="flex flex-col gap-3 text-sm text-tc-text-dim">
+              <a href="/store" className="text-tc-green transition-colors" onClick={() => setMobileNavOpen(false)}>Module Store</a>
+              <a href="/docs" className="hover:text-tc-green transition-colors" onClick={() => setMobileNavOpen(false)}>Docs</a>
+              <a href="#features" className="hover:text-tc-green transition-colors" onClick={() => setMobileNavOpen(false)}>Features</a>
+              <a href="/usage" className="hover:text-tc-green transition-colors" onClick={() => setMobileNavOpen(false)}>Usage</a>
+              <a href="#pricing" className="hover:text-tc-green transition-colors" onClick={() => setMobileNavOpen(false)}>Pricing</a>
+              <a href="#faq" className="hover:text-tc-green transition-colors" onClick={() => setMobileNavOpen(false)}>FAQ</a>
+              <a href="/auth/login" className="hover:text-tc-green transition-colors" onClick={() => setMobileNavOpen(false)}>Log In</a>
+              <button
+                onClick={() => {
+                  setMobileNavOpen(false);
+                  openModal();
+                }}
+                className="rounded-lg border border-tc-green/30 px-4 py-2 text-left font-bold text-tc-green transition-all hover:bg-tc-green/10"
+              >
+                Join Waitlist
+              </button>
+              <a
+                href="https://github.com/profullstack/threatcrush"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-tc-green transition-colors"
+                onClick={() => setMobileNavOpen(false)}
+              >
+                GitHub
+              </a>
+            </div>
+          </div>
+        )}
       </nav>
 
       <main>

@@ -21,7 +21,7 @@ describe("docs pages", () => {
     expect(page).toContain("Supported surface");
   });
 
-  it("homepage links people to the docs page and promotes the store", () => {
+  it("homepage links people to the docs page, promotes the store, and uses a mobile menu", () => {
     const page = read("src/app/page.tsx");
 
     expect(page).toContain('href="/docs"');
@@ -29,6 +29,9 @@ describe("docs pages", () => {
     expect(page).toContain("The <span className=\"text-tc-green glow-green\">Module Store</span> Comes First");
     expect(page).toContain("Explore Module Store");
     expect(page).toContain('href="/store/publish"');
+    expect(page).toContain("setMobileNavOpen");
+    expect(page).toContain("Toggle navigation menu");
+    expect(page).toContain('className="rounded-lg bg-tc-green px-3 py-2 text-sm font-bold text-black');
   });
 
   it("/docs/modules page documents module author contribution flow", () => {
