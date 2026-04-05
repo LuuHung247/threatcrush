@@ -203,7 +203,7 @@ export default function Home() {
                         and can bootstrap Node.js with <span className="text-tc-green">mise</span> on bare machines.
                       </p>
                       <p className="text-xs text-tc-text-dim mt-2">
-                        Server installs get the CLI. Desktop installs get the CLI + desktop app.
+                        Linux servers get the CLI. Linux desktops get CLI + desktop app. Windows is desktop-client only and connects to a ThreatCrush server elsewhere.
                       </p>
                     </div>
                     <div>
@@ -613,10 +613,10 @@ export default function Home() {
                     <div className="w-12 h-12 rounded-lg bg-tc-green/10 border border-tc-green/20 flex items-center justify-center text-2xl">⚡</div>
                     <div>
                       <h3 className="text-lg font-bold text-white">CLI</h3>
-                      <p className="text-xs text-tc-text-dim">Linux · macOS · Windows</p>
+                      <p className="text-xs text-tc-text-dim">Linux servers · desktop clients</p>
                     </div>
                   </div>
-                  <p className="text-sm text-tc-text-dim mb-4">The core agent. On servers, the installer gives you the CLI. On desktops, it can install the CLI + desktop app together.</p>
+                  <p className="text-sm text-tc-text-dim mb-4">The core agent. Linux servers run the real monitoring/daemon stack. Desktop installs are for operating and interfacing with a ThreatCrush server.</p>
                   <div className="rounded-lg bg-black/60 border border-tc-border px-3 py-2 font-mono text-xs">
                     <span className="text-tc-text-dim">$ </span>
                     <span className="text-tc-green">curl -fsSL https://threatcrush.com/install.sh | sh</span>

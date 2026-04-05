@@ -17,11 +17,12 @@ describe("install/update docs messaging", () => {
     expect(readme).toContain("threatcrush update");
     expect(readme).toContain("threatcrush remove");
     expect(readme).toContain("bootstrap Node.js with `mise`");
-    expect(readme).toContain("**Server** → installs the CLI");
-    expect(readme).toContain("**Desktop** → installs the CLI + desktop app");
+    expect(readme).toContain("**Linux server** → installs the CLI");
+    expect(readme).toContain("**Linux desktop** → installs the CLI + desktop app");
+    expect(readme).toContain("**Windows desktop** → installs the desktop app to connect to a ThreatCrush server elsewhere");
   });
 
-  it("CLI README promotes curl pipe sh and threatcrush lifecycle commands", () => {
+  it("CLI README promotes curl pipe sh and correct platform messaging", () => {
     const readme = read("cli/README.md");
 
     expect(readme).toContain("**Preferred install:**");
@@ -29,18 +30,20 @@ describe("install/update docs messaging", () => {
     expect(readme).toContain("threatcrush update");
     expect(readme).toContain("threatcrush remove");
     expect(readme).toContain("bootstrap Node.js with `mise`");
-    expect(readme).toContain("**Server** → installs the CLI");
-    expect(readme).toContain("**Desktop** → installs the CLI + desktop app");
+    expect(readme).toContain("**Linux server** → installs the CLI");
+    expect(readme).toContain("**Linux desktop** → installs the CLI + desktop app");
+    expect(readme).toContain("**Windows desktop** → installs the desktop app to connect to a ThreatCrush server elsewhere");
   });
 
-  it("homepage copy uses installer URL and highlights server vs desktop lifecycle", () => {
+  it("homepage copy reflects server-hosted Linux and desktop-client Windows", () => {
     const homePage = read("src/app/page.tsx");
 
     expect(homePage).toContain("curl -fsSL https://threatcrush.com/install.sh | sh");
     expect(homePage).toContain("threatcrush update");
     expect(homePage).toContain("threatcrush remove");
     expect(homePage).toContain("server</span> or <span className=\"text-tc-green\">desktop");
-    expect(homePage).toContain("CLI + desktop app");
+    expect(homePage).toContain("Windows is desktop-client only");
+    expect(homePage).toContain("Linux servers run the real monitoring/daemon stack");
     expect(homePage).toContain("bootstrap Node.js with");
     expect(homePage).toContain(">mise<");
   });

@@ -107,12 +107,14 @@ ensure_config_dir() {
 write_install_config() {
   MODE="$1"
   PM_NAME="$2"
+  PLATFORM_KIND="$3"
   ensure_config_dir
   cat > "$CONFIG_PATH" <<EOF
 {
   "installMode": "$MODE",
   "packageManager": "$PM_NAME",
-  "installMethod": "installer"
+  "installMethod": "installer",
+  "platformKind": "$PLATFORM_KIND"
 }
 EOF
 }
@@ -227,12 +229,11 @@ install_global_package() {
 install_desktop_bundle() {
   OS_NAME=$(detect_os)
   case "$OS_NAME" in
-    Linux|Darwin)
+    Linux|Darwin|MINGW*|MSYS*|CYGWIN*|Windows_NT)
       install_global_package "$DESKTOP_PKG_NAME"
       ;;
     *)
       say "${YELLOW}Desktop mode detected, but automatic desktop package install is not ready on ${OS_NAME}.${RESET}"
-      say "${DIM}CLI will still be installed. Desktop packaging can be added later for this OS.${RESET}"
       ;;
   esac
 }
@@ -240,10 +241,34 @@ install_desktop_bundle() {
 NODE_VERSION=$(detect_node)
 PM=$(detect_pm)
 INSTALL_MODE=$(detect_install_mode)
+OS_NAME=$(detect_os)
+PLATFORM_KIND="linux-server"
+
+case "$OS_NAME" in
+  Darwin)
+    PLATFORM_KIND="desktop-client"
+    ;;
+  MINGW*|MSYS*|CYGWIN*|Windows_NT)
+    PLATFORM_KIND="desktop-client"
+    ;;
+  Linux)
+    if [ "$INSTALL_MODE" = "desktop" ]; then
+      PLATFORM_KIND="linux-desktop"
+    else
+      PLATFORM_KIND="linux-server"
+    fi
+    ;;
+  *)
+    if [ "$INSTALL_MODE" = "desktop" ]; then
+      PLATFORM_KIND="desktop-client"
+    fi
+    ;;
+esac
 
 say "  ${DIM}Node.js:${RESET} ${NODE_VERSION:-not found}"
 say "  ${DIM}Package manager:${RESET} ${PM:-not found}"
 say "  ${DIM}Install mode:${RESET} ${INSTALL_MODE}"
+say "  ${DIM}Platform kind:${RESET} ${PLATFORM_KIND}"
 say "  ${DIM}Installer strategy:${RESET} curl | sh → detect server/desktop → bootstrap if needed"
 say ""
 
@@ -256,15 +281,20 @@ if [ -z "$NODE_VERSION" ] || [ -z "$PM" ]; then
   say ""
 fi
 
-install_global_package "$PKG_NAME"
-
-if [ "$INSTALL_MODE" = "desktop" ]; then
-  say ""
-  say "${GREEN}→ Desktop machine detected. Installing desktop bundle too...${RESET}"
+if [ "$PLATFORM_KIND" = "desktop-client" ]; then
+  say "${GREEN}→ Desktop client platform detected. Installing desktop app bundle...${RESET}"
   install_desktop_bundle
+else
+  install_global_package "$PKG_NAME"
+
+  if [ "$INSTALL_MODE" = "desktop" ]; then
+    say ""
+    say "${GREEN}→ Linux desktop detected. Installing desktop bundle too...${RESET}"
+    install_desktop_bundle
+  fi
 fi
 
-write_install_config "$INSTALL_MODE" "$(detect_pm)"
+write_install_config "$INSTALL_MODE" "$(detect_pm)" "$PLATFORM_KIND"
 
 say ""
 if command_exists threatcrush; then
@@ -272,22 +302,32 @@ if command_exists threatcrush; then
   say "${GREEN}✓ ThreatCrush ${VERSION} installed successfully!${RESET}"
   say ""
   say "  ${BOLD}Detected install mode:${RESET} ${INSTALL_MODE}"
+  say "  ${BOLD}Platform kind:${RESET} ${PLATFORM_KIND}"
   say "  ${BOLD}Preferred usage:${RESET}"
-  say "    ${GREEN}threatcrush${RESET}               ${DIM}# Setup / help${RESET}"
-  say "    ${GREEN}threatcrush init${RESET}          ${DIM}# Auto-detect services and generate config${RESET}"
-  say "    ${GREEN}threatcrush monitor${RESET}       ${DIM}# Real-time monitoring${RESET}"
-  say "    ${GREEN}threatcrush update${RESET}        ${DIM}# Upgrade CLI later using the same blessed path${RESET}"
-  say "    ${GREEN}threatcrush remove${RESET}        ${DIM}# Uninstall the installed bundle${RESET}"
+  if [ "$PLATFORM_KIND" = "desktop-client" ]; then
+    say "    ${GREEN}ThreatCrush Desktop${RESET}       ${DIM}# Connect to a ThreatCrush server${RESET}"
+    say "    ${GREEN}threatcrush update${RESET}        ${DIM}# Upgrade the installed desktop bundle${RESET}"
+    say "    ${GREEN}threatcrush remove${RESET}        ${DIM}# Uninstall the installed desktop bundle${RESET}"
+  else
+    say "    ${GREEN}threatcrush${RESET}               ${DIM}# Setup / help${RESET}"
+    say "    ${GREEN}threatcrush init${RESET}          ${DIM}# Auto-detect services and generate config${RESET}"
+    say "    ${GREEN}threatcrush monitor${RESET}       ${DIM}# Real-time monitoring${RESET}"
+    say "    ${GREEN}threatcrush update${RESET}        ${DIM}# Upgrade CLI later using the same blessed path${RESET}"
+    say "    ${GREEN}threatcrush remove${RESET}        ${DIM}# Uninstall the installed bundle${RESET}"
+  fi
   say ""
   say "  ${BOLD}Install model:${RESET}"
   say "    ${DIM}• Primary install:${RESET} curl -fsSL https://threatcrush.com/install.sh | sh"
   say "    ${DIM}• Machine type:${RESET} ${INSTALL_MODE}"
+  say "    ${DIM}• Platform kind:${RESET} ${PLATFORM_KIND}"
   say "    ${DIM}• Upgrades later:${RESET} threatcrush update"
   say "    ${DIM}• Bare machines:${RESET} installer can bootstrap Node.js with mise"
-  if [ "$INSTALL_MODE" = "desktop" ]; then
-    say "    ${DIM}• Desktop bundle:${RESET} CLI + desktop app"
+  if [ "$PLATFORM_KIND" = "desktop-client" ]; then
+    say "    ${DIM}• Desktop client:${RESET} desktop app only — connects to a ThreatCrush server elsewhere"
+  elif [ "$INSTALL_MODE" = "desktop" ]; then
+    say "    ${DIM}• Linux desktop:${RESET} CLI + desktop app"
   else
-    say "    ${DIM}• Server bundle:${RESET} CLI only"
+    say "    ${DIM}• Linux server:${RESET} CLI only"
   fi
 else
   say "${RED}Installation completed but 'threatcrush' was not found on PATH.${RESET}"

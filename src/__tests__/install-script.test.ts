@@ -16,24 +16,27 @@ describe("install.sh", () => {
     expect(installScript).toContain("mise use -g node@lts");
   });
 
-  it("detects whether the machine is server or desktop", () => {
+  it("detects whether the machine is server or desktop and records platform kind", () => {
     expect(installScript).toContain("detect_install_mode()");
     expect(installScript).toContain("DISPLAY");
     expect(installScript).toContain("WAYLAND_DISPLAY");
     expect(installScript).toContain("SSH_CONNECTION");
+    expect(installScript).toContain("PLATFORM_KIND");
+    expect(installScript).toContain("desktop-client");
+    expect(installScript).toContain("linux-server");
     expect(installScript).toContain("write_install_config");
   });
 
   it("frames threatcrush update/remove as the supported lifecycle path", () => {
     expect(installScript).toContain("threatcrush update");
     expect(installScript).toContain("threatcrush remove");
-    expect(installScript).toContain("Machine type:");
+    expect(installScript).toContain("Platform kind:");
   });
 
-  it("still installs the published CLI package and desktop bundle when needed", () => {
-    expect(installScript).toContain('PKG_NAME="@profullstack/threatcrush"');
+  it("treats desktop clients differently from Linux server installs", () => {
     expect(installScript).toContain('DESKTOP_PKG_NAME="@profullstack/threatcrush-desktop"');
-    expect(installScript).toContain('npm i -g "$PACKAGE_NAME"');
-    expect(installScript).toContain('install_desktop_bundle()');
+    expect(installScript).toContain('desktop-client');
+    expect(installScript).toContain('Linux server');
+    expect(installScript).toContain('install_desktop_bundle');
   });
 });
