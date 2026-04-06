@@ -14,7 +14,7 @@
 
 <h1 align="center">
   <br>
-  🛡️ ThreatCrush
+  ThreatCrush
   <br>
 </h1>
 
