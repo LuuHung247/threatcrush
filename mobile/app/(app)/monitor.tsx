@@ -21,19 +21,19 @@ export default function MonitorScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#0a0a0a' }}>
       {/* Header */}
-      <View className="px-4 py-4">
+      <View >
         <Text style={{ color: '#00ff41', fontSize: 20, fontWeight: '800', fontFamily: 'monospace' }}>
           LIVE MONITOR
         </Text>
-        <Text className="text-dim text-xs mt-1">Real-time event stream</Text>
+        <Text >Real-time event stream</Text>
       </View>
 
       {/* Module filter */}
-      <View className="px-4 mb-3">
-        <View className="flex-row flex-wrap gap-2">
+      <View >
+        <View >
           <Pressable
             onPress={() => setFilterModule(null)}
-            className="rounded-full px-3 py-1.5"
+            
             style={{
               backgroundColor: !filterModule ? '#00ff4122' : '#111111',
               borderWidth: 1,
@@ -48,7 +48,7 @@ export default function MonitorScreen() {
               <Pressable
                 key={mod.id}
                 onPress={() => setFilterModule(filterModule === mod.id ? null : mod.id)}
-                className="rounded-full px-3 py-1.5"
+                
                 style={{
                   backgroundColor: filterModule === mod.id ? '#00ff4122' : '#111111',
                   borderWidth: 1,
@@ -77,8 +77,8 @@ export default function MonitorScreen() {
           />
         }
         ListEmptyComponent={
-          <View className="items-center py-12">
-            <Text className="text-dim text-sm">No events matching filter</Text>
+          <View >
+            <Text >No events matching filter</Text>
           </View>
         }
       />

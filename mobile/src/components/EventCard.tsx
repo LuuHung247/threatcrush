@@ -10,17 +10,17 @@ interface EventCardProps {
 
 export function EventCard({ event }: EventCardProps) {
   return (
-    <View className="border-b border-border px-4 py-3" style={{ backgroundColor: '#111111' }}>
-      <View className="flex-row items-center justify-between mb-1">
-        <View className="flex-row items-center gap-2">
+    <View  style={{ backgroundColor: '#111111' }}>
+      <View >
+        <View >
           <ThreatBadge severity={event.severity} />
-          <Text className="text-dim text-xs">{event.module}</Text>
+          <Text >{event.module}</Text>
         </View>
-        <Text className="text-dim text-xs">{timeAgo(event.timestamp)}</Text>
+        <Text >{timeAgo(event.timestamp)}</Text>
       </View>
-      <Text className="text-txt text-sm">{event.message}</Text>
+      <Text >{event.message}</Text>
       {event.source && (
-        <Text className="text-dim text-xs mt-1">Source: {event.source}</Text>
+        <Text >Source: {event.source}</Text>
       )}
     </View>
   );

@@ -11,21 +11,21 @@ export default function DashboardScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#0a0a0a' }}>
-      <ScrollView className="flex-1 px-4">
+      <ScrollView >
         {/* Header */}
-        <View className="py-4">
+        <View >
           <Text style={{ color: '#00ff41', fontSize: 24, fontWeight: '800', fontFamily: 'monospace' }}>
             THREATCRUSH
           </Text>
-          <Text className="text-dim text-xs mt-1">THREAT INTELLIGENCE DASHBOARD</Text>
+          <Text >THREAT INTELLIGENCE DASHBOARD</Text>
         </View>
 
         {/* Big threat counter */}
         <View
-          className="items-center py-8 mb-4 border border-border rounded-lg"
+          
           style={{ backgroundColor: '#111111' }}
         >
-          <Text className="text-dim text-xs uppercase tracking-widest mb-2">Threats Blocked</Text>
+          <Text >Threats Blocked</Text>
           <Text
             style={{
               color: '#00ff41',
@@ -39,22 +39,22 @@ export default function DashboardScreen() {
           >
             {stats.threatsBlocked}
           </Text>
-          <Text className="text-dim text-xs mt-1">today</Text>
+          <Text >today</Text>
         </View>
 
         {/* Stats */}
-        <View className="mb-4">
+        <View >
           <StatsBar stats={stats} />
         </View>
 
         {/* Module status grid */}
-        <View className="mb-4">
-          <Text className="text-txt font-bold text-sm mb-3 uppercase tracking-wider">Module Status</Text>
-          <View className="flex-row flex-wrap gap-2">
+        <View >
+          <Text >Module Status</Text>
+          <View >
             {modules.map((mod) => (
               <View
                 key={mod.id}
-                className="flex-row items-center gap-1.5 border border-border rounded px-3 py-2"
+                
                 style={{ backgroundColor: '#111111' }}
               >
                 <View
@@ -65,16 +65,16 @@ export default function DashboardScreen() {
                     backgroundColor: mod.status === 'running' ? '#00ff41' : '#ff4444',
                   }}
                 />
-                <Text className="text-txt text-xs">{mod.name}</Text>
+                <Text >{mod.name}</Text>
               </View>
             ))}
           </View>
         </View>
 
         {/* Recent events */}
-        <View className="mb-8">
-          <Text className="text-txt font-bold text-sm mb-3 uppercase tracking-wider">Recent Events</Text>
-          <View className="border border-border rounded-lg overflow-hidden">
+        <View >
+          <Text >Recent Events</Text>
+          <View >
             {recentEvents.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}

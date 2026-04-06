@@ -9,9 +9,9 @@ interface StatsBarProps {
 
 function StatItem({ label, value, color = '#e0e0e0' }: { label: string; value: string; color?: string }) {
   return (
-    <View className="items-center flex-1">
+    <View >
       <Text style={{ color, fontSize: 18, fontWeight: '700' }}>{value}</Text>
-      <Text className="text-dim text-xs mt-1">{label}</Text>
+      <Text >{label}</Text>
     </View>
   );
 }
@@ -19,7 +19,7 @@ function StatItem({ label, value, color = '#e0e0e0' }: { label: string; value: s
 export function StatsBar({ stats }: StatsBarProps) {
   return (
     <View
-      className="flex-row border border-border rounded-lg p-4"
+      
       style={{ backgroundColor: '#111111' }}
     >
       <StatItem label="Events" value={formatNumber(stats.eventsToday)} />

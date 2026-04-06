@@ -13,18 +13,18 @@ export function ModuleCard({ module: mod, onToggle }: ModuleCardProps) {
   return (
     <Pressable
       onPress={onToggle}
-      className="border border-border rounded-lg p-4 mb-3"
+      
       style={{ backgroundColor: '#111111' }}
     >
-      <View className="flex-row items-center justify-between mb-2">
-        <View className="flex-row items-center gap-2">
+      <View >
+        <View >
           <View
             style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: statusColor }}
           />
-          <Text className="text-txt font-bold text-base">{mod.name}</Text>
+          <Text >{mod.name}</Text>
         </View>
         <View
-          className="rounded-full px-3 py-1"
+          
           style={{ backgroundColor: mod.enabled ? '#00ff4122' : '#66666622' }}
         >
           <Text style={{ color: mod.enabled ? '#00ff41' : '#666666', fontSize: 12, fontWeight: '600' }}>
@@ -32,9 +32,9 @@ export function ModuleCard({ module: mod, onToggle }: ModuleCardProps) {
           </Text>
         </View>
       </View>
-      <Text className="text-dim text-sm mb-1">{mod.description}</Text>
+      <Text >{mod.description}</Text>
       {mod.enabled && (
-        <Text className="text-dim text-xs">{mod.eventsToday} events today</Text>
+        <Text >{mod.eventsToday} events today</Text>
       )}
     </Pressable>
   );
