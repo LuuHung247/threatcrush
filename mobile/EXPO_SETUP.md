@@ -7,7 +7,7 @@ This mobile app is prepared to live under a separate Expo project identity.
 - `slug`: `threatcrush-mobile`
 - `owner`: defaults to `profullstack`, override with `EXPO_OWNER`
 - `extra.eas.projectId`: defaults to the currently-linked project id in `mobile/app.config.ts`, override with `EXPO_PROJECT_ID`
-- app version is derived from `mobile/package.json`
+- app version is currently set explicitly in `mobile/app.config.ts`
 
 ## What still needs to happen
 
