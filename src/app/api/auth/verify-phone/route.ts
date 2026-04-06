@@ -9,8 +9,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Phone, code, and user_id are required" }, { status: 400 });
     }
 
-    // STUB: Accept any 6-digit code for now
-    // TODO: Real SMS verification via Twilio
+    // Development stub: accepts any 6-digit code until a real SMS provider is wired in.
+    // Not suitable for production verification.
     if (!/^\d{6}$/.test(code)) {
       return NextResponse.json({ error: "Invalid code. Must be 6 digits." }, { status: 400 });
     }
