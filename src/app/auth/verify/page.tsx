@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { getSupabaseClient } from "@/lib/supabase";
+import { authHeaders, getAccessToken } from "@/lib/auth-client";
 
 function VerifyContent() {
   const searchParams = useSearchParams();
@@ -17,36 +17,24 @@ function VerifyContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [resendCooldown, setResendCooldown] = useState(0);
-  const [userId, setUserId] = useState<string | null>(null);
   const [checkingStatus, setCheckingStatus] = useState(true);
 
   // Check current verification status
   useEffect(() => {
     const checkStatus = async () => {
-      const supabase = getSupabaseClient();
-      const { data: { session } } = await supabase.auth.getSession();
-
-      if (session?.user) {
-        setUserId(session.user.id);
-
-        // Check if email is verified via Supabase auth
-        if (session.user.email_confirmed_at) {
-          setEmailVerified(true);
+      if (!getAccessToken()) {
+        setCheckingStatus(false);
+        return;
+      }
+      try {
+        const res = await fetch("/api/auth/check", { headers: authHeaders() });
+        if (res.ok) {
+          const data = await res.json();
+          setEmailVerified(!!data.email_verified);
+          setPhoneVerified(!!data.phone_verified);
         }
-
-        // Check profile verification status
-        try {
-          const res = await fetch("/api/auth/check", {
-            headers: { Authorization: `Bearer ${session.access_token}` },
-          });
-          if (res.ok) {
-            const data = await res.json();
-            setEmailVerified(data.email_verified);
-            setPhoneVerified(data.phone_verified);
-          }
-        } catch {
-          // Silent fail
-        }
+      } catch {
+        // Silent fail
       }
       setCheckingStatus(false);
     };
@@ -67,15 +55,20 @@ function VerifyContent() {
 
   const handleResendEmail = async () => {
     if (resendCooldown > 0) return;
-    const supabase = getSupabaseClient();
-    const { error } = await supabase.auth.resend({
-      type: "signup",
-      email: emailParam,
-    });
-    if (error) {
-      setError(error.message);
-    } else {
+    try {
+      const res = await fetch("/api/auth/resend", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailParam, type: "signup" }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Could not resend email");
+        return;
+      }
       setResendCooldown(60);
+    } catch {
+      setError("Network error");
     }
   };
 
@@ -88,19 +81,12 @@ function VerifyContent() {
     setError("");
 
     try {
-      const supabase = getSupabaseClient();
-      const { data: { session } } = await supabase.auth.getSession();
-
       const res = await fetch("/api/auth/verify-phone", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(session ? { Authorization: `Bearer ${session.access_token}` } : {}),
-        },
+        headers: authHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({
           phone: phone || phoneParam,
           code: phoneCode,
-          user_id: userId,
         }),
       });
 

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { getSupabaseClient } from "@/lib/supabase";
+import { setAccessToken } from "@/lib/auth-client";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -21,29 +21,30 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const supabase = getSupabaseClient();
-      const { data, error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
+      const data = await res.json();
 
-      if (authError) {
-        setError(authError.message);
+      if (!res.ok) {
+        setError(data.error || "Login failed");
         return;
       }
 
-      if (data.session) {
-        // Check verification status
-        const res = await fetch("/api/auth/check", {
-          headers: { Authorization: `Bearer ${data.session.access_token}` },
-        });
-        const check = await res.json();
+      const token = data.session?.access_token;
+      if (!token) {
+        setError("Login succeeded but no session was returned");
+        return;
+      }
+      setAccessToken(token);
 
-        if (!check.email_verified || !check.phone_verified) {
-          window.location.href = `/auth/verify?next=${encodeURIComponent(nextPath)}`;
-        } else {
-          window.location.href = nextPath;
-        }
+      const verified = data.verified || {};
+      if (!verified.email || !verified.phone) {
+        window.location.href = `/auth/verify?next=${encodeURIComponent(nextPath)}`;
+      } else {
+        window.location.href = nextPath;
       }
     } catch {
       setError("Network error. Please try again.");
@@ -57,15 +58,24 @@ export default function LoginPage() {
       setError("Enter your email first");
       return;
     }
-    const supabase = getSupabaseClient();
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/login`,
-    });
-    if (error) {
-      setError(error.message);
-    } else {
+    try {
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          redirectTo: `${window.location.origin}/auth/login`,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Could not send reset email");
+        return;
+      }
       setError("");
       alert("Password reset email sent! Check your inbox.");
+    } catch {
+      setError("Network error. Please try again.");
     }
   };
 

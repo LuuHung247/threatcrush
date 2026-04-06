@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
+import { authHeaders } from "@/lib/auth-client";
 
 export default function AccountContent() {
-  const { user, profile, loading, signOut, refreshProfile } = useAuth();
+  const { signedIn, profile, loading, signOut, refreshProfile } = useAuth();
   const [editing, setEditing] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
@@ -35,7 +36,7 @@ export default function AccountContent() {
     );
   }
 
-  if (!user) {
+  if (!signedIn) {
     return (
       <div className="min-h-screen bg-tc-darker flex items-center justify-center">
         <div className="text-center">
@@ -53,7 +54,7 @@ export default function AccountContent() {
     try {
       const res = await fetch("/api/auth/me", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: authHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({
           display_name: displayName,
           wallet_address: walletAddress,

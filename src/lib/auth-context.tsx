@@ -1,8 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
-import { getSupabaseClient } from "./supabase";
-import type { User, Session } from "@supabase/supabase-js";
+import { getAccessToken, setAccessToken, authHeaders } from "./auth-client";
 
 interface UserProfile {
   id: string;
@@ -27,19 +26,17 @@ interface UserProfile {
 }
 
 interface AuthContextType {
-  user: User | null;
-  session: Session | null;
   profile: UserProfile | null;
   loading: boolean;
+  signedIn: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
-  user: null,
-  session: null,
   profile: null,
   loading: true,
+  signedIn: false,
   signOut: async () => {},
   refreshProfile: async () => {},
 });
@@ -49,70 +46,60 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
 
-  const supabase = getSupabaseClient();
-
-  const fetchProfile = useCallback(async (userId: string) => {
+  const fetchProfile = useCallback(async () => {
+    const token = getAccessToken();
+    if (!token) {
+      setProfile(null);
+      setSignedIn(false);
+      return;
+    }
     try {
-      const res = await fetch("/api/auth/me", {
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await fetch("/api/auth/me", { headers: authHeaders() });
       if (res.ok) {
         const data = await res.json();
         setProfile(data.profile);
+        setSignedIn(true);
+      } else if (res.status === 401) {
+        setAccessToken(null);
+        setProfile(null);
+        setSignedIn(false);
       }
     } catch {
-      // Profile fetch failed silently
+      // Network error — keep current state
     }
   }, []);
 
   const refreshProfile = useCallback(async () => {
-    if (user?.id) {
-      await fetchProfile(user.id);
-    }
-  }, [user, fetchProfile]);
+    await fetchProfile();
+  }, [fetchProfile]);
 
   useEffect(() => {
-    const init = async () => {
-      const { data: { session: currentSession } } = await supabase.auth.getSession();
-      setSession(currentSession);
-      setUser(currentSession?.user ?? null);
-      if (currentSession?.user) {
-        await fetchProfile(currentSession.user.id);
-      }
+    (async () => {
+      await fetchProfile();
       setLoading(false);
-    };
-
-    init();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, newSession) => {
-        setSession(newSession);
-        setUser(newSession?.user ?? null);
-        if (newSession?.user) {
-          await fetchProfile(newSession.user.id);
-        } else {
-          setProfile(null);
-        }
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, [supabase, fetchProfile]);
+    })();
+  }, [fetchProfile]);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setSession(null);
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: authHeaders(),
+      });
+    } catch {
+      // ignore — we still clear locally
+    }
+    setAccessToken(null);
     setProfile(null);
+    setSignedIn(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, signOut, refreshProfile }}>
+    <AuthContext.Provider value={{ profile, loading, signedIn, signOut, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );
