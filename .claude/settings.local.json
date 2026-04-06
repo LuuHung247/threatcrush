@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mv icons/manifest.json .)",
+      "Bash(mv icons/browserconfig.xml .)",
+      "Bash(mv icons/favicon.ico .)",
+      "Bash(rm icons/meta-tags.html icons/favicon.svg icons/favicon.png)"
+    ]
+  }
+}
