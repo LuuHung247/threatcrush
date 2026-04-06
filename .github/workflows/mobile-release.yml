@@ -55,6 +55,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Write production env file
+        shell: bash
+        run: |
+          printf '%s\n' '${{ secrets.ENV_FILE }}' > .env
+
       - name: Validate Expo app
         working-directory: mobile
         run: |
