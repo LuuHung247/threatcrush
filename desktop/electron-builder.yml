@@ -1,5 +1,9 @@
 appId: com.threatcrush.desktop
 productName: ThreatCrush
+# Explicitly disable publishing so electron-builder 25.x doesn't crash
+# with "Cannot read properties of null (reading 'channel')" in
+# updateInfoBuilder when computing auto-update channel names.
+publish: null
 directories:
   buildResources: resources
 files:

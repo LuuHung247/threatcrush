@@ -3,7 +3,19 @@
   "version": "0.1.16",
   "description": "ThreatCrush Desktop - Security Monitoring Dashboard",
   "main": "./out/main/index.js",
-  "author": "profullstack",
+  "homepage": "https://threatcrush.com",
+  "author": {
+    "name": "Profullstack, Inc.",
+    "email": "hello@profullstack.com",
+    "url": "https://profullstack.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/profullstack/threatcrush.git"
+  },
+  "bugs": {
+    "url": "https://github.com/profullstack/threatcrush/issues"
+  },
   "license": "MIT",
   "scripts": {
     "dev": "electron-vite dev",
