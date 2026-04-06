@@ -1,11 +1,11 @@
 {
-  "name": "threatcrush",
-  "short_name": "App",
-  "description": "Your app description",
+  "name": "ThreatCrush — Real-Time Threat Intelligence Platform",
+  "short_name": "ThreatCrush",
+  "description": "Crush every threat before it crushes you. Real-time threat feeds, vulnerability tracking, attack surface monitoring, and threat actor intelligence.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
   "orientation": "portrait-primary",
   "icons": [
     {
