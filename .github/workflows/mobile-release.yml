@@ -80,6 +80,8 @@ jobs:
 
           if [ -n "${{ github.event.inputs.platform }}" ]; then
             PLATFORM="${{ github.event.inputs.platform }}"
+          elif [ "$PROFILE" = "preview" ]; then
+            PLATFORM="android"
           else
             PLATFORM="all"
           fi
