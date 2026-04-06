@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseAdmin } from "@/lib/supabase";
+import { getSupabaseClient, getSupabaseAdmin } from "@/lib/supabase";
 
 function generateReferralCode(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
@@ -18,20 +18,30 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
     }
 
-    const supabase = getSupabaseAdmin();
-
-    // Create auth user
-    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+    // Use the anon client so Supabase actually sends the confirmation email.
+    // admin.createUser silently creates users without sending any email.
+    const anon = getSupabaseClient();
+    const { data: authData, error: authError } = await anon.auth.signUp({
       email,
       password,
-      email_confirm: false,
+      options: {
+        emailRedirectTo: `${new URL(req.url).origin}/auth/verify`,
+      },
     });
 
     if (authError) {
       return NextResponse.json({ error: authError.message }, { status: 400 });
     }
 
-    const userId = authData.user.id;
+    const userId = authData.user?.id;
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Signup did not return a user id" },
+        { status: 500 },
+      );
+    }
+
+    const supabase = getSupabaseAdmin();
 
     // Generate unique referral code
     let userReferralCode = generateReferralCode();
@@ -65,8 +75,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Failed to create profile: " + profileError.message }, { status: 500 });
     }
 
-    // Send verification email (Supabase handles this via their built-in flow)
-    // The user needs to use signInWithPassword then verify via email link
+    // Verification email is sent automatically by auth.signUp above.
 
     return NextResponse.json({
       user: { id: userId, email },

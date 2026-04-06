@@ -190,19 +190,20 @@ function VerifyContent() {
                 <p className="text-yellow-500/80 text-xs">
                   ⚠️ Beta: Any 6-digit code will work for now
                 </p>
-                <div className="flex gap-2">
+                <div className="flex gap-2 w-full">
                   <input
                     type="text"
+                    inputMode="numeric"
                     value={phoneCode}
                     onChange={(e) => setPhoneCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                     maxLength={6}
                     placeholder="000000"
-                    className="flex-1 bg-tc-darker border border-tc-border rounded-lg px-4 py-2.5 text-white text-center tracking-[0.5em] font-mono text-lg placeholder:text-tc-text-dim focus:outline-none focus:border-tc-green/50 transition-colors"
+                    className="min-w-0 flex-1 bg-tc-darker border border-tc-border rounded-lg px-3 py-2.5 text-white text-center tracking-[0.3em] font-mono text-base placeholder:text-tc-text-dim focus:outline-none focus:border-tc-green/50 transition-colors"
                   />
                   <button
                     onClick={handleVerifyPhone}
                     disabled={loading || phoneCode.length !== 6}
-                    className="bg-tc-green text-black font-bold px-6 py-2.5 rounded-lg hover:bg-tc-green-dim transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="shrink-0 bg-tc-green text-black font-bold px-4 py-2.5 rounded-lg hover:bg-tc-green-dim transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? "..." : "Verify"}
                   </button>
