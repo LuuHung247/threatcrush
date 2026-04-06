@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import type { ThreatEvent } from '../lib/api';
 import { ThreatBadge } from './ThreatBadge';
 import { timeAgo } from '../lib/utils';
@@ -10,18 +10,50 @@ interface EventCardProps {
 
 export function EventCard({ event }: EventCardProps) {
   return (
-    <View  style={{ backgroundColor: '#111111' }}>
-      <View >
-        <View >
+    <View style={styles.card}>
+      <View style={styles.headerRow}>
+        <View style={styles.metaRow}>
           <ThreatBadge severity={event.severity} />
-          <Text >{event.module}</Text>
+          <Text style={styles.module}>{event.module}</Text>
         </View>
-        <Text >{timeAgo(event.timestamp)}</Text>
+        <Text style={styles.dim}>{timeAgo(event.timestamp)}</Text>
       </View>
-      <Text >{event.message}</Text>
-      {event.source && (
-        <Text >Source: {event.source}</Text>
-      )}
+      <Text style={styles.message}>{event.message}</Text>
+      {event.source ? <Text style={styles.dim}>Source: {event.source}</Text> : null}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: '#111111',
+    borderBottomWidth: 1,
+    borderBottomColor: '#222222',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  module: {
+    color: '#666666',
+    fontSize: 12,
+  },
+  message: {
+    color: '#e0e0e0',
+    fontSize: 14,
+  },
+  dim: {
+    color: '#666666',
+    fontSize: 12,
+    marginTop: 4,
+  },
+});
