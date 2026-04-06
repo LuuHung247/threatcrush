@@ -1,6 +1,8 @@
 import type { ExpoConfig, ConfigContext } from 'expo/config';
-import pkg from './package.json';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
+const pkg = JSON.parse(readFileSync(join(__dirname, 'package.json'), 'utf8')) as { version: string };
 const expoOwner = process.env.EXPO_OWNER || 'profullstack';
 const expoProjectId = process.env.EXPO_PROJECT_ID || '6128e774-2ee6-4e21-b2d2-62a5045b813c';
 
