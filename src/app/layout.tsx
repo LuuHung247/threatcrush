@@ -4,15 +4,18 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
-  title: "ThreatCrush — Real-Time Threat Intelligence Platform",
+  title: "ZT-Lab — Zero Trust Microsegmentation Dashboard",
   description:
-    "Crush every threat before it crushes you. Real-time threat feeds, vulnerability tracking, attack surface monitoring, and threat actor intelligence.",
+    "GNS3 Spine-Leaf datacenter fabric với SONiC, microsegmentation iptables, và Suricata IDS real-time monitoring. NIST 800-207 Zero Trust Architecture.",
   keywords: [
-    "threat intelligence",
-    "cybersecurity",
-    "vulnerability tracking",
-    "attack surface monitoring",
-    "threat feeds",
+    "zero trust",
+    "microsegmentation",
+    "suricata",
+    "IDS",
+    "spine-leaf",
+    "SONiC",
+    "datacenter",
+    "network security",
   ],
   manifest: "/manifest.json",
   icons: {
