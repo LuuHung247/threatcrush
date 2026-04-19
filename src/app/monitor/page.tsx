@@ -40,7 +40,6 @@ const ZONES = ["ALL", "WEB", "DB", "APP", "MGT"] as const;
 type Zone = (typeof ZONES)[number];
 type Priority = 0 | 1 | 2 | 3 | 4;
 
-const POLL_INTERVAL = 5000; // 5 seconds
 
 function ipZone(ip: string): string {
   if (ip.startsWith("10.1.100.")) return "WEB";
@@ -61,41 +60,72 @@ function formatTs(ts: string) {
 export default function MonitorPage() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [paused, setPaused] = useState(false);
-  const [online, setOnline] = useState<boolean | null>(null);
+  const [status, setStatus] = useState<"connecting" | "live" | "offline">("connecting");
   const [filterZone, setFilterZone] = useState<Zone>("ALL");
   const [filterPriority, setFilterPriority] = useState<Priority>(0);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => { setMounted(true); }, []);
   const pausedRef = useRef(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => { setMounted(true); }, []);
+
+  // Load historical alerts on mount
   useEffect(() => {
-    const poll = async () => {
-      if (pausedRef.current) return;
-      try {
-        const res = await fetch("/api/ids/alerts?last=200");
-        if (!res.ok) throw new Error("non-ok");
-        const json = await res.json();
+    fetch("/api/ids/alerts?last=200")
+      .then((r) => r.json())
+      .then((json) => {
         const data: Alert[] = Array.isArray(json) ? json : (json.alerts ?? []);
         setAlerts([...data].reverse());
-        setOnline(true);
-        setLastUpdate(new Date());
         setLoading(false);
-      } catch {
-        setOnline(false);
-        setLoading(false);
-      }
-    };
-
-    poll(); // immediate first load
-    const id = setInterval(poll, POLL_INTERVAL);
-    return () => clearInterval(id);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
-  // Auto-scroll to bottom when new alerts arrive
+  // SSE real-time stream — qua Next.js /api/ids/stream (browser chỉ cần port 3000)
+  useEffect(() => {
+    let es: EventSource;
+    let reconnectTimer: ReturnType<typeof setTimeout>;
+
+    const connect = () => {
+      es = new EventSource("/api/ids/stream");
+
+      es.onopen = () => {
+        setStatus("live");
+        setLastUpdate(new Date());
+      };
+      es.onerror = () => {
+        setStatus("offline");
+        es.close();
+        reconnectTimer = setTimeout(connect, 3000);
+      };
+      es.onmessage = (evt) => {
+        try {
+          const data = JSON.parse(evt.data);
+          // Event "connected" từ Go Agent — xác nhận stream live
+          if (data?.type === "connected") {
+            setStatus("live");
+            setLastUpdate(new Date());
+            return;
+          }
+          if (pausedRef.current) return;
+          if (!data?.alert?.signature) return;
+          setStatus("live");
+          setAlerts((prev) => [data as Alert, ...prev].slice(0, 500));
+          setLastUpdate(new Date());
+        } catch {}
+      };
+    };
+
+    connect();
+    return () => {
+      clearTimeout(reconnectTimer);
+      es?.close();
+    };
+  }, []);
+
   useEffect(() => {
     if (!paused) {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -134,26 +164,27 @@ export default function MonitorPage() {
               <h1 className="text-2xl font-bold text-white font-mono">Live Monitor</h1>
               {mounted && (
                 <span className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-mono border ${
-                  online === null
+                  status === "connecting"
                     ? "bg-tc-card text-tc-text-dim border-tc-border"
-                    : online
+                    : status === "live"
                     ? "bg-tc-green/10 text-tc-green border-tc-green/30"
                     : "bg-red-900/20 text-red-400 border-red-700/30"
                 }`}>
                   <span className={`w-1.5 h-1.5 rounded-full ${
-                    online === null ? "bg-tc-text-dim" : online ? "bg-tc-green animate-pulse" : "bg-red-400"
+                    status === "connecting" ? "bg-tc-text-dim" :
+                    status === "live" ? "bg-tc-green animate-pulse" : "bg-red-400"
                   }`} />
-                  {online === null ? "LOADING" : online ? "LIVE" : "OFFLINE"}
+                  {status === "connecting" ? "CONNECTING" : status === "live" ? "LIVE" : "OFFLINE"}
                 </span>
               )}
               {mounted && lastUpdate && (
                 <span className="text-xs font-mono text-tc-text-dim">
-                  updated {lastUpdate.toLocaleTimeString("vi-VN", { hour12: false })}
+                  {lastUpdate.toLocaleTimeString("vi-VN", { hour12: false })}
                 </span>
               )}
             </div>
             <p className="text-sm text-tc-text-dim">
-              Polling Suricata IDS alerts · every {POLL_INTERVAL / 1000}s · last 200 alerts
+              SSE real-time stream · Go IDS Agent · auto-reconnect on disconnect
             </p>
           </div>
           <button
@@ -227,7 +258,9 @@ export default function MonitorPage() {
               <div className="p-8 text-center font-mono text-tc-green text-sm animate-pulse">Loading...</div>
             ) : filtered.length === 0 ? (
               <div className="p-8 text-center font-mono text-tc-text-dim text-sm">
-                {online === false ? "⚠ IDS offline — check GNS3 IDS node" : "No alerts match current filters."}
+                {status === "offline"
+                  ? "⚠ Go IDS Agent offline — chạy: cd /3s-com/ids-agent && ./ids-agent"
+                  : "No alerts match current filters."}
               </div>
             ) : (
               filtered.map((a, i) => (

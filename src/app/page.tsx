@@ -121,7 +121,7 @@ export default function HomePage() {
           </ScrollReveal>
           <ScrollReveal delay={100}>
             <h1 className="mt-4 text-4xl sm:text-6xl font-bold text-white glow-green-strong leading-tight">
-              Zero Trust Lab
+              3S-NOS
             </h1>
             <h2 className="text-2xl sm:text-3xl font-bold text-tc-green font-mono mt-1">
               Spine-Leaf DC Fabric

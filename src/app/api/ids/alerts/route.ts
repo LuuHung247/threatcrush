@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const IDS_BASE = process.env.IDS_API_URL ?? "http://112.137.129.232:8765";
+const AGENT_BASE = process.env.AGENT_URL ?? "http://localhost:8766";
 
 export async function GET(req: NextRequest) {
   const last = req.nextUrl.searchParams.get("last");
-  const url = last ? `${IDS_BASE}/alerts?last=${last}` : `${IDS_BASE}/alerts`;
+  const url = last ? `${AGENT_BASE}/alerts?last=${last}` : `${AGENT_BASE}/alerts`;
 
   try {
     const res = await fetch(url, {

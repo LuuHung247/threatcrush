@@ -17,7 +17,7 @@ export default function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2 sm:px-6">
         <a href="/" className="flex items-center gap-2">
           <span className="text-xl font-bold text-tc-green glow-green font-mono">
-            ⚡ ZT-Lab
+            ⚡ 3S-NOS
           </span>
           <span className="hidden sm:inline text-xs font-mono text-tc-text-dim border border-tc-border/50 rounded px-2 py-0.5">
             Spine-Leaf DC Fabric

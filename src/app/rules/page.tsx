@@ -52,6 +52,16 @@ const rules = [
     desc: "Application tier không được phép truy cập management zone. Phát hiện kết nối này là dấu hiệu compromised application hoặc insider threat.",
   },
   {
+    sid: 9000006,
+    priority: 1,
+    category: "Lateral Movement",
+    name: "APP direct to DB – lateral movement (SC-3b)",
+    from: "APP (10.2.100.0/24)",
+    to: "DB (10.1.200.0/24)",
+    proto: "IP",
+    desc: "Phát hiện APP tier kết nối trực tiếp tới DB mà không qua authorized path. Đây là multi-hop lateral movement (SC-3b): attacker đã compromise APP node và đang cố exfiltrate data từ DB subnet.",
+  },
+  {
     sid: 9000010,
     priority: 3,
     category: "Reconnaissance",
@@ -103,11 +113,11 @@ export default function RulesPage() {
       <div className="mx-auto max-w-6xl px-6 py-10">
         <ScrollReveal>
           <div className="mb-2 inline-flex items-center rounded-full border border-tc-green/20 bg-tc-green/5 px-4 py-1.5 text-xs font-mono text-tc-green">
-            Suricata 8.0 · zt-lab.rules · 8 rules loaded
+            Suricata 8.0 · 3s-nos.rules · 9 rules loaded
           </div>
           <h1 className="mt-3 text-3xl font-bold text-white">Detection Rules</h1>
           <p className="mt-2 text-sm text-tc-text-dim max-w-2xl">
-            8 Suricata rules phát hiện vi phạm chính sách Zero Trust. Được nhóm theo category:
+            9 Suricata rules phát hiện vi phạm chính sách Zero Trust. Được nhóm theo category:
             Policy Violation (P1), Lateral Movement (P2), Reconnaissance (P3), và Audit (P4).
           </p>
         </ScrollReveal>
@@ -116,8 +126,8 @@ export default function RulesPage() {
         <ScrollReveal delay={100}>
           <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
             {[
-              { label: "Total Rules", value: "8", color: "text-white" },
-              { label: "P1 Critical", value: "2", color: "text-red-400" },
+              { label: "Total Rules", value: "9", color: "text-white" },
+              { label: "P1 Critical", value: "3", color: "text-red-400" },
               { label: "P2 High", value: "3", color: "text-orange-400" },
               { label: "P3+P4", value: "3", color: "text-yellow-400" },
             ].map((s) => (
@@ -176,7 +186,7 @@ export default function RulesPage() {
         <ScrollReveal delay={500}>
           <div className="mt-8 rounded-xl border border-tc-border/50 bg-tc-darker p-4 font-mono text-xs text-tc-text-dim">
             <div className="text-tc-green mb-2"># Rule file location on IDS node:</div>
-            <div>/etc/suricata/rules/zt-lab.rules</div>
+            <div>/etc/suricata/rules/3s-nos.rules</div>
             <div className="mt-2 text-tc-green"># Config:</div>
             <div>/etc/suricata/suricata-zt.yaml</div>
             <div className="mt-2 text-tc-green"># Logs:</div>

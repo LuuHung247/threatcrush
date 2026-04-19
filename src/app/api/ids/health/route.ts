@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 
-const IDS_BASE = process.env.IDS_API_URL ?? "http://112.137.129.232:8765";
+const AGENT_BASE = process.env.AGENT_URL ?? "http://localhost:8766";
 
 export async function GET() {
   try {
-    const res = await fetch(`${IDS_BASE}/health`, {
+    const res = await fetch(`${AGENT_BASE}/health`, {
       next: { revalidate: 0 },
       signal: AbortSignal.timeout(5000),
     });
