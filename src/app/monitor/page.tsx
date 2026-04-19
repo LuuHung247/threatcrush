@@ -7,7 +7,7 @@ interface Alert {
   alert: {
     signature: string;
     signature_id: number;
-    priority: number;
+    severity: number;
     category: string;
   };
   src_ip: string;
@@ -111,16 +111,16 @@ export default function MonitorPage() {
 
   const filtered = alerts.filter((a) => {
     if (filterZone !== "ALL" && ipZone(a.src_ip) !== filterZone) return false;
-    if (filterPriority !== 0 && a.alert?.priority !== filterPriority) return false;
+    if (filterPriority !== 0 && a.alert?.severity !== filterPriority) return false;
     return true;
   });
 
   const stats = {
     total: alerts.length,
-    p1: alerts.filter((a) => a.alert?.priority === 1).length,
-    p2: alerts.filter((a) => a.alert?.priority === 2).length,
-    p3: alerts.filter((a) => a.alert?.priority === 3).length,
-    p4: alerts.filter((a) => a.alert?.priority === 4).length,
+    p1: alerts.filter((a) => a.alert?.severity === 1).length,
+    p2: alerts.filter((a) => a.alert?.severity === 2).length,
+    p3: alerts.filter((a) => a.alert?.severity === 3).length,
+    p4: alerts.filter((a) => a.alert?.severity === 4).length,
   };
 
   return (
@@ -232,14 +232,14 @@ export default function MonitorPage() {
             ) : (
               filtered.map((a, i) => (
                 <div key={i} className={`border-b border-tc-border/40 border-l-2 px-4 py-3 hover:bg-tc-green/5 transition-colors ${
-                  PRIORITY_COLORS[a.alert?.priority] ?? PRIORITY_COLORS[4]
+                  PRIORITY_COLORS[a.alert?.severity] ?? PRIORITY_COLORS[4]
                 }`}>
                   {/* Mobile */}
                   <div className="sm:hidden">
                     <div className="flex items-start justify-between gap-2 mb-1">
                       <span className="text-xs text-tc-text-dim font-mono">{formatTs(a.timestamp)}</span>
-                      <span className={`px-2 py-0.5 rounded border text-xs font-mono font-bold ${PRIORITY_BADGE[a.alert?.priority] ?? PRIORITY_BADGE[4]}`}>
-                        {PRIORITY_LABEL[a.alert?.priority] ?? `P${a.alert?.priority}`}
+                      <span className={`px-2 py-0.5 rounded border text-xs font-mono font-bold ${PRIORITY_BADGE[a.alert?.severity] ?? PRIORITY_BADGE[4]}`}>
+                        {PRIORITY_LABEL[a.alert?.severity] ?? `P${a.alert?.severity}`}
                       </span>
                     </div>
                     <div className="text-xs text-tc-text mb-1">{a.alert?.signature}</div>
@@ -254,8 +254,8 @@ export default function MonitorPage() {
                     <span className="text-xs text-tc-text truncate">{a.alert?.signature}</span>
                     <span className="text-xs font-mono text-tc-text-dim whitespace-nowrap truncate">{a.src_ip} → {a.dest_ip}</span>
                     <span className="text-xs font-mono text-tc-green">{ipZone(a.src_ip)}</span>
-                    <span className={`px-2 py-0.5 rounded border text-xs font-mono font-bold w-fit ${PRIORITY_BADGE[a.alert?.priority] ?? PRIORITY_BADGE[4]}`}>
-                      {PRIORITY_LABEL[a.alert?.priority] ?? `P${a.alert?.priority}`}
+                    <span className={`px-2 py-0.5 rounded border text-xs font-mono font-bold w-fit ${PRIORITY_BADGE[a.alert?.severity] ?? PRIORITY_BADGE[4]}`}>
+                      {PRIORITY_LABEL[a.alert?.severity] ?? `P${a.alert?.severity}`}
                     </span>
                   </div>
                 </div>

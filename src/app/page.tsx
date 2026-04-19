@@ -15,7 +15,7 @@ interface Alert {
   alert: {
     signature: string;
     signature_id: number;
-    priority: number;
+    severity: number;
     category: string;
   };
   src_ip: string;
@@ -57,22 +57,25 @@ function ipZone(ip: string) {
 export default function HomePage() {
   const [health, setHealth] = useState<HealthData | null>(null);
   const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [totalAlerts, setTotalAlerts] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
       fetch("/api/ids/health").then((r) => r.json()).catch(() => null),
       fetch("/api/ids/alerts?last=5").then((r) => r.json()).catch(() => []),
-    ]).then(([h, a]) => {
+      fetch("/api/ids/alerts").then((r) => r.json()).catch(() => null),
+    ]).then(([h, a, all]) => {
       setHealth(h);
       const arr = Array.isArray(a) ? a : (a?.alerts ?? []);
       setAlerts(arr.slice(0, 5));
+      setTotalAlerts(all?.count ?? arr.length);
       setLoading(false);
     });
   }, []);
 
-  const violations = alerts.filter((a) => a.alert?.priority <= 2).length;
-  const totalToday = health?.alerts_total ?? 0;
+  const violations = alerts.filter((a) => a.alert?.severity <= 2).length;
+  const totalToday = totalAlerts;
 
   const statCards = [
     {
@@ -230,7 +233,7 @@ export default function HomePage() {
                             {ipZone(a.src_ip)}
                           </td>
                           <td className="px-4 py-3">
-                            {priorityBadge(a.alert?.priority)}
+                            {priorityBadge(a.alert?.severity)}
                           </td>
                         </tr>
                       ))}
