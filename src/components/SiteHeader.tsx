@@ -10,6 +10,7 @@ export default function SiteHeader() {
     { href: "/monitor", label: "Monitor" },
     { href: "/topology", label: "Topology" },
     { href: "/rules", label: "Rules" },
+    { href: "/policy", label: "Policy" },
   ];
 
   return (
